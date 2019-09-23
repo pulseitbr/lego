@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    const responseTypes = [
+      ["json", "application/json"],
+      ["text", "text/"],
+      ["formData", "multipart/form-data"],
+      ["arrayBuffer", "*/*"],
+      ["blob", "*/*"]
+    ];
+
+    const inRange = (target) => (init, end) => init >= target && init < end;
+
+    const defineParserFromMimeType = (value = "") => {
+      if (value === undefined || value === null) {
+        return "blob";
+      }
+      for (const tuple of responseTypes) {
+        const [type, headerPattern] = tuple;
+        if (value.indexOf(headerPattern)) {
+          return type;
+        }
+      }
+      return "blob";
+    };
+
+    const parseBodyRequest = (body) => {
+      if (body === undefined || body === null) {
+        return null;
+      }
+      if (Array.isArray) {
+        return JSON.stringify(body);
+      }
+      if (body.toString() === "[Object object]") {
+        return JSON.stringify(body);
+      }
+      return body;
+    };
+
+    const isSameOrigin = (url) => url.origin === window.location.origin
+
+    const Fetch = (url, body, config = { headers: {} }) => {
+      const urlObject = new URL(url)
+      const sameOrigin = isSameOrigin(urlObject);
+      const { headers: userHeaders, method, abortOnHttpError = false, ...userConfig } = config
+      let headers = {
+        "User-Agent": "hermes-http",
+        connection: "keep-alive",
+        Accept: "application/json, text/plain, */*",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
+        ...userHeaders,
+      };
+      if (!sameOrigin) {
+        const { authorization, ...newHeaders } = headers
+        headers = newHeaders
+      }
+      const addHeader = (key, value) => {
+        headers[key] = value
+        return FetchMethods
+      }
+      const FetchMethods = {
+        addHeader,
+        setUserAgent: (agent) => addHeader("User-Agent", agent),
+        setAuthorization: (value) => addHeader("Authorization", value),
+        execute: () => new Promise(async (resolve, reject) => {
+          try {
+            const response = await fetch(url, {
+              headers,
+              method,
+              body: parseBodyRequest(body),
+              redirect: "follow",
+              credentials: sameOrigin ? "include" : "same-origin",
+              keepalive: false,
+              mode: "cors",//sameOrigin ? "no-cors" : "cors",
+              cache: "default",
+              ...userConfig
+            });
+            const contentType = defineParserFromMimeType(response.headers.get("Content-Type"));
+            const parser = defineParserFromMimeType(contentType)
+            console.log(response)
+            const bodyData = await response[parser]();
+            const responseHeaders = [...response.headers].reduce((acc, el) => ({ ...acc, [el[0]]: el[1] }), {})
+            const statusCode = inRange(response.status)
+            /*
+              HTTP Status Code reference:
+              https://github.com/spring-projects/spring-framework/blob/master/spring-web/src/main/java/org/springframework/http/HttpStatus.java
+            */
+            const IsSuccessStatusCode = statusCode(200, 227)
+            const IsClientErrorStatusCode = statusCode(400, 452)
+            const IsServerErrorStatusCode = statusCode(500, 512)
+            const commonResponse = {
+              IsSuccessStatusCode,
+              IsClientErrorStatusCode,
+              IsServerErrorStatusCode
+            }
+            if (response.ok) {
+              return resolve({
+                ...commonResponse,
+                content: bodyData,
+                ok: response.ok,
+                status: response.status,
+                headers: responseHeaders,
+                statusText: response.statusText
+              });
+            }
+            const responseError = {
+              ...commonResponse,
+              content: bodyData,
+              ok: response.ok,
+              headers: { ...response.headers, "Content-Length": 0 },
+              status: response.status,
+              statusText: response.statusText,
+              isResponseError: true
+            }
+            if (abortOnHttpError) {
+              throw responseError
+            }
+            return reject(responseError);
+          } catch (error) {
+            throw reject({
+              error,
+              ok: false,
+              status: 0,
+              headers: null,
+              content: null,
+              isResponseError: false,
+              statusText: "response.statusText"
+            });
+          }
+        })
+      }
+      return FetchMethods
+    };
+    Fetch.get = (url, config) => Fetch(url, undefined, config);
+    Fetch.post = async (url, body, config) => Fetch(url, body, { ...config, method: "POST" });
+    Fetch.put = async (url, body, config) => Fetch(url, body, { ...config, body, method: "PUT" });
+    Fetch.patch = async (url, body, config) => Fetch(url, body, { ...config, body, method: "PATCH" });
+    Fetch.delete = async (url, config) => Fetch(url, undefined, { ...config, method: "DELETE" });
+    const requestCep = Fetch.get("https://api.postmon.com.br/v1/cep/21310310");
+    // const requestCep = Fetch.get("https://app.billingpay.com.br/api/midia/associacao/402750/midias/todas");
+    requestCep.setAuthorization("eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJkMWY2YzkzMC05MTgyLTQ1ZjQtOTNlMC1kNTk0NjY3Y2U4MTAiLCJzdWIiOiJ0ZXN0ZWZ1QHB1bHNlaXQuY29tLmJyIiwibm9tZSI6IlRlc3RlIEZVIiwicGVyZmlzIjpbIlVTVUFSSU8iXSwiZW1haWwiOiJ0ZXN0ZWZ1QHB1bHNlaXQuY29tLmJyIiwiaWF0IjoxNTY3NzM1Nzc4LCJleHAiOjE1OTkyNzE3Nzh9.-KZxMaSosJ-S_H9iqIw2Kv1gfd0j8GSHgyOoDuO6uYfQ7s6891hWlc90yQ_jzPuEGJ6CVo_1rzc5IAWd0IWOiw")
+    requestCep.execute().then(e => console.log(e))
+  </script>
+</body>
+
+</html>
