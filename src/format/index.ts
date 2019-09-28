@@ -1,4 +1,5 @@
 import { OnlyNumbers, ToNumberString } from "../utils";
+import Decimal from "decimal.js";
 
 type TypeSeparator = { text: string; separator: string };
 
@@ -35,10 +36,10 @@ export const FormatCardNumber = (card: string = "") =>
 export const FormatBrlToFloat = (currency: string | number = "") =>
 	Number.parseFloat(ToNumberString(currency.toString()));
 
-export const FormatBRL = (number: string = "") => {
-	const float = FormatBrlToFloat(number);
-	return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(float);
-};
+export const FormatBRL = (number: string | number = "") =>
+	new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" })
+		.format(new Decimal(number).toNumber())
+		.replace(/\$/, "$ ");
 
 export const FormatBrNumber = (number: string | number = "") =>
 	new Intl.NumberFormat("pt-BR").format(FormatBrlToFloat(number));
@@ -64,7 +65,7 @@ export const Slugify = (text: string, isUpper = false) => {
 
 export const Trim = (text: string) => text.trim().replace(/\s\s+/g, " ");
 
-export function Titlelize(str: string, preserve = false) {
+export function TitleFormat(str: string, preserve = false) {
 	const words = str.split(" ");
 	const title = words.reduce((acc: string, curr: string) => {
 		const first = curr.substring(0, 1).toUpperCase();
@@ -78,7 +79,7 @@ export const ReplaceAll = (text: string, expression: string, newValue: string) =
 	text.replace(new RegExp(expression, "g"), newValue);
 
 export const BRSentence = (str: string) =>
-	Titlelize(str)
+	TitleFormat(str)
 		.replace(/ Da /g, " da ")
 		.replace(/ De /g, " de ")
 		.replace(/ Di /g, " di ")
@@ -90,10 +91,19 @@ export const BRSentence = (str: string) =>
 		.replace(/ Uns /g, " uns ")
 		.replace(/ Del /g, " del ");
 
-export function CamelCase(text: string) {
+export const CamelCase = (text: string) => {
 	const s = text
 		.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)!
 		.map((x) => x.slice(0, 1).toUpperCase() + x.slice(1).toLowerCase())
 		.join("");
 	return s.slice(0, 1).toLowerCase() + s.slice(1);
+};
+
+export interface IMask {
+	text: string;
+	pad: number;
+	maskStr?: string;
 }
+
+export const HideMask = (text: string, padding: string, maskChar = "*") =>
+	`${text}`.slice(-padding).padStart(`${text}`.length, maskChar);

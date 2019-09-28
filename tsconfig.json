@@ -3,6 +3,7 @@
     "outDir": "build",
     "module": "esnext",
     "alwaysStrict": true,
+    "allowSyntheticDefaultImports": true,
     "downlevelIteration": true,
     "target": "es5",
     "lib": [
