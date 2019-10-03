@@ -29,27 +29,33 @@ export const copyToClipboard = (str: string) => {
 	document.body.removeChild(el);
 };
 
-const appendTagOnHead = (element: HTMLElement) => {
+export const appendTagOnHead = (element: HTMLElement) => {
 	document.getElementsByTagName("head")[0].appendChild(element);
 };
+
+export const styleConsole = (text: string, color = "red", fontSize = "58") => {
+	console.log(`%c${text}`, `color: ${color};font-size: ${fontSize}px;`);
+};
+
+export const appendIconLink = (href: string, rel = "icon") => {
+	const link = document.createElement("link");
+	link.rel = rel;
+	link.type = "image/x-icon";
+	link.href = href;
+	appendTagOnHead(link);
+};
+
+export const addMetaTag = (value: string, keyName = "theme-color") => {
+	const meta = document.createElement("meta");
+	meta.name = keyName;
+	meta.content = value;
+	appendTagOnHead(meta);
+};
+
 export default {
-	appendIconLink: (href: string, rel = "icon") => {
-		const link = document.createElement("link");
-		link.rel = rel;
-		link.type = "image/x-icon";
-		link.href = href;
-		appendTagOnHead(link);
-	},
-	addMetaTag: (value: string, keyName = "theme-color") => {
-		const meta = document.createElement("meta");
-		meta.name = keyName;
-		meta.content = value;
-		appendTagOnHead(meta);
-	},
-	appendTagOnHead,
-	styleConsole: (text: string, color = "red", fontSize = "58") => {
-		console.log(`%c${text}`, `color: ${color};font-size: ${fontSize}px;`);
-	},
+	appendIconLink,
+	styleConsole,
 	copyToClipboard,
-	getBlob
+	getBlob,
+	appendTagOnHead
 };
