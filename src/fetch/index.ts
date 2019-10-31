@@ -1,10 +1,4 @@
-const responseTypes = [
-	["json", "application/json"],
-	["text", "text/"],
-	["formData", "multipart/form-data"],
-	["arrayBuffer", "*/*"],
-	["blob", "*/*"]
-];
+const responseTypes = [["json", "application/json"], ["text", "text/"], ["formData", "multipart/form-data"], ["arrayBuffer", "*/*"], ["blob", "*/*"]];
 
 const defineParserFromMimeType = (value: string | undefined | null = "") => {
 	if (value === undefined || value === null) {
@@ -32,61 +26,69 @@ const parseBodyRequest = (body: any) => {
 	return body;
 };
 
-type ResponseFetch = {
-	ok: boolean;
-	data: any;
-	headers: any;
-	status: number;
-	statusText: string | null;
-};
+// type ResponseFetch = {
+// 	ok: boolean;
+// 	data: any;
+// 	headers: any;
+// 	status: number;
+// 	statusText: string | null;
+// };
 
 type RequestConfig = {
 	responseType: string;
 	headers: { [key: string]: string };
 	authorization?: string | null | undefined;
 	method: "GET" | "POST" | "PUT" | "DELETE";
-};
+} & RequestInit;
 
-const Fetch = async <T>(url: string, body: T, config: RequestConfig): Promise<ResponseFetch> => {
-	return new Promise(async (resolve, reject) => {
-		const headers: { [key: string]: string } = config.headers || {};
-		const response = await fetch(url, {
-			body: parseBodyRequest(body),
-			headers: {
-				"User-Agent": "hermes-http",
-				connection: "keep-alive",
-				Accept: "application/json, text/plain, */*",
-				"Accept-Encoding": "gzip, deflate, br",
-				"Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
-				...headers
-			},
-			redirect: "follow",
-			credentials: "same-origin",
-			keepalive: false,
-			mode: "cors",
-			cache: "default",
-			method: config.method,
-			...config
-		});
-		const contentType = defineParserFromMimeType(response.headers.get("Content-Type"));
-		if (response.ok) {
-			const bodyData = await response[contentType]();
-			return resolve({
+type TypeHeaders = { [key: string]: string };
+
+const Fetch = async <T>(url: string, body: T, config: RequestConfig) => {
+	const exec = () =>
+		new Promise(async (resolve, reject) => {
+			const { headers = {} as TypeHeaders, ...configRest } = config;
+			// const headers: TypeHeaders = config.headers || {};
+			const response = await fetch(url, {
+				body: parseBodyRequest(body),
+				headers: {
+					"User-Agent": "hermes-http",
+					connection: "keep-alive",
+					Accept: "application/json, text/plain, */*",
+					"Accept-Encoding": "gzip, deflate, br",
+					"Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
+					...headers
+				},
+				redirect: "follow",
+				credentials: "same-origin",
+				keepalive: false,
+				mode: "cors",
+				cache: "default",
+				method: config.method,
+				...configRest
+			});
+			const contentType = defineParserFromMimeType(response.headers.get("Content-Type"));
+			if (response.ok) {
+				const bodyData = await response[contentType]();
+				return resolve({
+					ok: response.ok,
+					data: bodyData as any,
+					headers: { ...response.headers, "Content-Length": bodyData.length },
+					status: response.status,
+					statusText: response.statusText
+				});
+			}
+			return reject({
 				ok: response.ok,
-				data: bodyData as any,
-				headers: { ...response.headers, "Content-Length": bodyData.length },
+				data: (await response[contentType]()) as any,
+				headers: { ...response.headers, "Content-Length": 0 },
 				status: response.status,
 				statusText: response.statusText
 			});
-		}
-		return reject({
-			ok: response.ok,
-			data: (await response[contentType]()) as any,
-			headers: { ...response.headers, "Content-Length": 0 },
-			status: response.status,
-			statusText: response.statusText
 		});
-	});
+
+	return {
+		exec
+	};
 };
 
 Fetch.get = async (url: string, config: any) => Fetch(url, undefined, config);
@@ -99,6 +101,7 @@ Fetch.put = async (url: string, body: any, config: any) => Fetch(url, body, { ..
 Fetch.Put = Fetch.put;
 
 Fetch.patch = async (url: string, body: any, config: any) => Fetch(url, body, { ...config, body, method: "PATCH" });
+Fetch.Patch = Fetch.patch;
 
 Fetch.delete = async (url: string, config: any) => Fetch(url, undefined, { ...config, method: "DELETE" });
 Fetch.Delete = Fetch.delete;

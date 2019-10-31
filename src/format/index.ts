@@ -1,8 +1,18 @@
 type TypeSeparator = { text: string; separator: string };
+export type Mask = {
+	text: string;
+	pad: number;
+	maskStr?: string;
+};
 
+export const GetChars = (string: string = "") => string.split("");
 
-export const FormatCardNumber = (card: string = "") =>
-	card.replace(/(\d{4})(\d{4})(\d{4})(\d{4})/, "$1 $2 $3 $4").trim();
+export const ReverseString = (string: string = "") =>
+	GetChars(string)
+		.reverse()
+		.join("");
+
+export const FormatCardNumber = (card: string = "") => card.replace(/(\d{4})(\d{4})(\d{4})(\d{4})/, "$1 $2 $3 $4").trim();
 
 const convert = (doc: TypeSeparator) =>
 	doc.text
@@ -32,21 +42,7 @@ export function TitleFormat(str: string, preserve = false) {
 	return Trim(title);
 }
 
-export const ReplaceAll = (text: string, expression: string, newValue: string) =>
-	text.replace(new RegExp(expression, "g"), newValue);
-
-export const BRSentence = (str: string) =>
-	TitleFormat(str)
-		.replace(/ Da /g, " da ")
-		.replace(/ De /g, " de ")
-		.replace(/ Di /g, " di ")
-		.replace(/ Do /g, " do ")
-		.replace(/ Du /g, " du ")
-		.replace(/ Das /g, " das ")
-		.replace(/ Dos /g, " dos ")
-		.replace(/ Um /g, " um ")
-		.replace(/ Uns /g, " uns ")
-		.replace(/ Del /g, " del ");
+export const ReplaceAll = (text: string, expression: string, newValue: string) => text.replace(new RegExp(expression, "g"), newValue);
 
 export const CamelCase = (text: string) => {
 	const s = text
@@ -56,11 +52,4 @@ export const CamelCase = (text: string) => {
 	return s.slice(0, 1).toLowerCase() + s.slice(1);
 };
 
-export interface IMask {
-	text: string;
-	pad: number;
-	maskStr?: string;
-}
-
-export const HideMask = (text: string, padding: string, maskChar = "*") =>
-	`${text}`.slice(-padding).padStart(`${text}`.length, maskChar);
+export const HideMask = (text: string, padding: string, maskChar = "*") => `${text}`.slice(-padding).padStart(`${text}`.length, maskChar);
