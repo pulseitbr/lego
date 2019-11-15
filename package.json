@@ -4,7 +4,7 @@
   "description": "",
   "author": "pulseitbr",
   "license": "MIT",
-  "repository": "pulseitbr/L.E.G.O",
+  "repository": "lego",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "decimal.js": "^10.2.0",
+    "fetch-interceptor": "^1.1.0",
     "moment": "^2.24.0"
   },
   "peerDependencies": {

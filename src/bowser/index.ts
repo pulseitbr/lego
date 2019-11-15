@@ -1,8 +1,8 @@
-import Fetch from "../fetch";
+import HttpClient from "../http-client";
 
 export const getBlob = async (url: string | string, filename: string, fallback: Function) => {
 	try {
-		const response = await Fetch.Get(url, { responseType: "blob" });
+		const response = await HttpClient.Get(url, { responseType: "blob" });
 		const link = document.createElement("a");
 		link.href = window.URL.createObjectURL(new Blob([response.data]));
 		link.setAttribute("download", filename);
