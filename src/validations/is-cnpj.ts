@@ -1,4 +1,4 @@
-import { OnlyNumbers } from "../utils";
+import { OnlyNumbers } from "../format/number";
 
 const getChar = (str: string, position: number) => Number.parseInt(str.charAt(position), 10);
 
