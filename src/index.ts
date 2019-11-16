@@ -6,3 +6,7 @@ export * from "./validations";
 export { BbCodeParser } from "./html/bbcode";
 export * from "./format/number";
 export * from "./format/dates";
+export * from "./tenants/";
+export * from "./tenants/profiles";
+export * from "./config";
+export * from "./tenants/allow-view";
