@@ -30,9 +30,19 @@ export const Slugify = (text: string, isUpper = false) => {
 	return isUpper ? slug.toLocaleUpperCase() : slug;
 };
 
-export const Trim = (text: string) => text.trim().replace(/\s\s+/g, " ");
+/*
+    No browser, a API de Intl usa o carácter 160(&nbsp ou Non-breaking space) da tabela ASCII,
+    quebrando toda comparação feita com o carácter 32 (espaço).
+    Para evitar comparações erradas com espaço, o método Trim irá trocar este carácter por
+    espaço (32 ou  ).
+*/
+export const Trim = (text: string) =>
+	text
+		.replace(/\u00A0/g, " ")
+		.trim()
+		.replace(/\s\s+/g, " ");
 
-export function TitleFormat(str: string, preserve = false) {
+export const TitleFormat = (str: string, preserve = false) => {
 	const words = str.split(" ");
 	const title = words.reduce((acc: string, curr: string) => {
 		const first = curr.substring(0, 1).toUpperCase();
@@ -40,7 +50,7 @@ export function TitleFormat(str: string, preserve = false) {
 		return preserve ? `${acc}${first}${second} ` : `${acc}${first}${second.toLowerCase()} `;
 	}, "");
 	return Trim(title);
-}
+};
 
 export const ReplaceAll = (text: string, expression: string, newValue: string) => text.replace(new RegExp(expression, "g"), newValue);
 

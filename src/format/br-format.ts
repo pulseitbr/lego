@@ -1,6 +1,5 @@
-import Decimal from "decimal.js";
-import { TitleFormat } from ".";
-import { OnlyNumbers, FormatCurrencyToFloat } from "./Number";
+import { TitleFormat, Trim } from ".";
+import { FormatCurrencyToFloat, OnlyNumbers, ToNumber } from "./number";
 
 export const FormatCep = (cep: string = "") => OnlyNumbers(cep).replace(/(\d{5})(\d{3})/gi, "$1-$2");
 
@@ -27,8 +26,14 @@ export const FormatPhone = (phone: string = "", countryCodeLength = 2) => {
 	return numbers.replace(new RegExp(`(\d${countryCodeLength})(\d\d)(\d{5})(\d{4})`, "gi"), "+$1 $2 $3-$4");
 };
 
-export const FormatBRL = (number: string | number = "") =>
-	new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(new Decimal(number).toNumber()).replace(/\$/, "$ ");
+export const FormatBRL = (number: string | number = "") => {
+	const str = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(ToNumber(number));
+	/*
+        No browser, a API de Intl usa o carácter 160(&nbsp ou Non-breaking space) da tabela ASCII,
+        quebrando toda comparação feita com o carácter 32 (espaço)
+    */
+	return Trim(str).replace(/\u00A0/g, " ");
+};
 
 export const FormatBrNumber = (number: string | number = "") => new Intl.NumberFormat("pt-BR").format(FormatCurrencyToFloat(number));
 

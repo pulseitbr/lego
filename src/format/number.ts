@@ -4,18 +4,20 @@ export const OnlyNumbers = (t: string = "") => t.replace(/[^\d]/gi, "");
 
 export const ToInt = (int: number | string) => Number.parseInt(ToNumberString(int.toString()), 10);
 
-export const ToNumberString = (number: string = "", precision = 2) =>
+export const ToNumberString = (number: string | number = "", precision = 2) =>
 	new Decimal(number)
 		.toDP(precision)
 		.toNumber()
 		.toString();
+
+export const ToNumber = (number: string | number = "", precision = 2) => new Decimal(number).toDP(precision).toNumber();
 export const ToFloat = (number: string) => Number.parseFloat(ToNumberString(number));
 
-export const formatCurrencyFloor = (value: string | number) => {
-	const str = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 3 }).format(
+export const FormatCurrencyFloor = (value: string | number, precision: number = 3, currency: string = "BRL") => {
+	const str = new Intl.NumberFormat("pt-BR", { style: "currency", currency, minimumFractionDigits: precision }).format(
 		new Decimal(value)
-			.toDecimalPlaces(3)
-			.toDP(3)
+			.toDecimalPlaces(precision)
+			.toDP(precision)
 			.toNumber()
 	);
 	return str.slice(0, -1);

@@ -2,7 +2,7 @@ import { AnyText } from "../typings";
 
 export type HeaderPropsConstructor = { [key: string]: AnyText };
 
-class Header {
+export default class Header {
 	public headers: Headers;
 	constructor(headers: HeaderPropsConstructor & any) {
 		this.headers = new Headers();
@@ -13,7 +13,6 @@ class Header {
 	}
 
 	public addAuthorization(token: string, authorizationName = "Authorization") {
-		console.log(this);
 		this.headers.append(authorizationName, token);
 	}
 
@@ -29,5 +28,3 @@ class Header {
 		return headers;
 	}
 }
-
-export default Header;

@@ -1,5 +1,5 @@
 import { isProd } from "../env";
-import IsObject from "../validations/IsObject";
+import IsObject from "../validations/is-object";
 
 const Console = (...args: any[]) => {
 	if (isProd) {

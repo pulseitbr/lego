@@ -1,20 +1,10 @@
-import HttpClient from "../http-client";
-
-export const getBlob = async (url: string | string, filename: string, fallback: Function) => {
-	try {
-		const response = await HttpClient.Get(url, { responseType: "blob" });
-		const link = document.createElement("a");
-		link.href = window.URL.createObjectURL(new Blob([response.data]));
-		link.setAttribute("download", filename);
-		document.body.appendChild(link);
-		link.click();
-		return Promise.resolve({
-			ok: true,
-			file: filename
-		});
-	} catch (error) {
-		return Promise.reject(fallback());
-	}
+export const getBlob = async (filename: string, blob: Blob) => {
+	const link = document.createElement("a");
+	link.href = window.URL.createObjectURL(new Blob([blob]));
+	link.setAttribute("download", filename);
+	document.body.appendChild(link);
+	link.click();
+	document.body.removeChild(link);
 };
 
 export const copyToClipboard = (str: string) => {

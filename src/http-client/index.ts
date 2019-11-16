@@ -1,4 +1,4 @@
-import Header, { HeaderPropsConstructor } from "./Header";
+import Header, { HeaderPropsConstructor } from "./header";
 
 type ResponseFetch = {
 	ok: boolean;
