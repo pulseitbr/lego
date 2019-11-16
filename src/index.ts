@@ -9,4 +9,5 @@ export * from "./format/dates";
 export * from "./tenants/";
 export * from "./tenants/profiles";
 export * from "./config";
+export { default as Colors } from "./config";
 export * from "./tenants/allow-view";
