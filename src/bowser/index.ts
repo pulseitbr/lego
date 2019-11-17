@@ -1,4 +1,4 @@
-export const getBlob = async (filename: string, blob: Blob) => {
+export const downloadBlob = (filename: string, blob: Blob) => {
 	const link = document.createElement("a");
 	link.href = window.URL.createObjectURL(new Blob([blob]));
 	link.setAttribute("download", filename);
@@ -7,9 +7,9 @@ export const getBlob = async (filename: string, blob: Blob) => {
 	document.body.removeChild(link);
 };
 
-export const copyToClipboard = (str: string) => {
+export const copyToClipboard = (copyString: string) => {
 	const el = document.createElement("textarea");
-	el.value = str;
+	el.value = copyString;
 	el.setAttribute("readonly", "");
 	el.style.position = "absolute";
 	el.style.left = "-9999px";
@@ -23,10 +23,6 @@ export const appendTagOnHead = (element: HTMLElement) => {
 	document.getElementsByTagName("head")[0].appendChild(element);
 };
 
-export const styleConsole = (text: string, color = "red", fontSize = "58") => {
-	console.log(`%c${text}`, `color: ${color};font-size: ${fontSize}px;`);
-};
-
 export const appendIconLink = (href: string, rel = "icon") => {
 	const link = document.createElement("link");
 	link.rel = rel;
@@ -34,7 +30,6 @@ export const appendIconLink = (href: string, rel = "icon") => {
 	link.href = href;
 	appendTagOnHead(link);
 };
-
 export const addMetaTag = (value: string, keyName = "theme-color") => {
 	const meta = document.createElement("meta");
 	meta.name = keyName;
@@ -43,9 +38,9 @@ export const addMetaTag = (value: string, keyName = "theme-color") => {
 };
 
 export default {
+	addMetaTag,
+	appendTagOnHead,
 	appendIconLink,
-	styleConsole,
 	copyToClipboard,
-	getBlob,
-	appendTagOnHead
+	downloadBlob
 };
