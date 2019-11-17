@@ -1,6 +1,8 @@
 export * from "./format";
 export { default as HttpClient } from "./http-client";
 export { default as Console } from "./html/console";
+export { default as Keyboard } from "./bowser/keyboard";
+export { default as Dimensions } from "./bowser/dimensions";
 export * from "./format/br-format";
 export * from "./validations";
 export { BbCodeParser } from "./html/bbcode";
