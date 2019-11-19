@@ -19,8 +19,8 @@ export const copyToClipboard = (copyString: string) => {
 	document.body.removeChild(el);
 };
 
-export const appendTagOnHead = (element: HTMLElement) => {
-	document.getElementsByTagName("head")[0].appendChild(element);
+export const appendElementOnTag = (element: HTMLElement, tag = "head") => {
+	document.getElementsByTagName(tag)[0].appendChild(element);
 };
 
 export const appendIconLink = (href: string, rel = "icon") => {
@@ -28,19 +28,33 @@ export const appendIconLink = (href: string, rel = "icon") => {
 	link.rel = rel;
 	link.type = "image/x-icon";
 	link.href = href;
-	appendTagOnHead(link);
+	appendElementOnTag(link);
 };
+
 export const addMetaTag = (value: string, keyName = "theme-color") => {
 	const meta = document.createElement("meta");
 	meta.name = keyName;
 	meta.content = value;
-	appendTagOnHead(meta);
+	appendElementOnTag(meta);
 };
 
-export default {
-	addMetaTag,
-	appendTagOnHead,
-	appendIconLink,
-	copyToClipboard,
-	downloadBlob
+type NewStyleSheet = {
+	addCssExtension?: boolean;
+	baseURL?: string;
+};
+
+const stylesheetUrlBase = "https://io.billingpay.com.br/bp/stylesheet/";
+
+export const createStyleSheet = (filename: string, { addCssExtension = true, baseURL = stylesheetUrlBase }: NewStyleSheet) => {
+	const file = addCssExtension ? `${filename}.css` : filename;
+	const url = `${baseURL.replace(/\/$/, "")}/${file}`;
+	const stylesheet = document.createElement("link");
+	stylesheet.setAttribute("rel", "stylesheet");
+	stylesheet.setAttribute("type", "text/css");
+	stylesheet.setAttribute("href", url);
+	return stylesheet;
+};
+
+export const addStyleSheet = (stylesheet: HTMLLinkElement, tag: "body" | "head" = "body") => {
+	appendElementOnTag(stylesheet, tag);
 };

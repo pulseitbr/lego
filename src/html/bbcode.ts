@@ -1,10 +1,12 @@
-import { sanitizeHtml } from ".";
 import { Trim } from "../format";
 import { OnlyNumbers } from "../format/number";
 import { IsNotEmpty } from "../validations/is-empty";
 
-const placeholder = { class: "", phone: { text: "", number: "" }, style: {}, user: "" };
+const sanitizeHtml = (str = "") => str.replace(/<[^>]*>/g, "");
+
 const fnPlaceholder = (v: string) => v;
+
+const placeholder = { class: "", phone: { text: "", number: "" }, style: {}, user: "" };
 
 type StringMap = { [key: string]: string };
 type FunctionMap = { [key: string]: (v: string) => string };

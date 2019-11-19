@@ -8,6 +8,8 @@ export { default as Console } from "./html/console";
 export { default as Keyboard } from "./bowser/keyboard";
 export { default as Dimensions } from "./bowser/dimensions";
 export * from "./format/br-format";
+export * from "./helpers/debounce";
+export * from "./helpers/throttle";
 export * from "./validations";
 export { BbCodeParser } from "./html/bbcode";
 export { default as ViewOnProfile } from "./tenants/allow-view";
