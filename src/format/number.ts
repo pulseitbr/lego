@@ -11,6 +11,7 @@ export const ToNumberString = (number: string | number = "", precision = 2) =>
 		.toString();
 
 export const ToNumber = (number: string | number = "", precision = 2) => new Decimal(number).toDP(precision).toNumber();
+
 export const ToFloat = (number: string) => Number.parseFloat(ToNumberString(number));
 
 export const FormatCurrencyFloor = (value: string | number, precision: number = 3, currency: string = "BRL") => {
