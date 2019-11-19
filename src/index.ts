@@ -1,5 +1,15 @@
 export * from "./format";
 export { default as HttpClient } from "./http-client";
-export { default as Console } from "./html/Console";
-export * from "./format/BrFormat";
-export { Equals } from "./validations/Equals";
+export { default as Console } from "./html/console";
+export { default as Keyboard } from "./bowser/keyboard";
+export { default as Dimensions } from "./bowser/dimensions";
+export * from "./format/br-format";
+export * from "./validations";
+export { BbCodeParser } from "./html/bbcode";
+export * from "./format/number";
+export * from "./format/dates";
+export * from "./tenants/";
+export * from "./tenants/profiles";
+export * from "./config";
+export { default as Colors } from "./config";
+export * from "./tenants/allow-view";

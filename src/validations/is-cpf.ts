@@ -1,17 +1,4 @@
-import { OnlyNumbers, ToFloat, ToInt } from "../utils";
-
-const ufPerNinthDigit = [
-	["RS"], // 0
-	["DF", "GO", "MT", "MS", "TO"], // 1
-	["AM", "PA", "RR", "AP", "AC", "RO"], // 2
-	["CE", "MA", "PI"], // 3
-	["PB", "PE", "AL", "RN"], // 4
-	["BA", "SE"], // 5
-	["MG"], // 6
-	["RJ", "ES"], // 7
-	["SP"], // 8
-	["PR", "SC"] // 9
-];
+import { OnlyNumbers, ToFloat, ToInt } from "../format/number";
 
 type States =
 	| "RS"

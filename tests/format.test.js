@@ -1,7 +1,9 @@
 const { FormatBRL, FormatCpf, FormatCep } = require("../dist");
 
 test("BRL Format", () => {
-	expect(FormatBRL("20.5")).toBe("R$ 20.50");
+	const format = FormatBRL("20.5").toString();
+	const str = "R$ 20,50";
+	expect(format).toEqual(str);
 });
 
 test("Cep format", () => {

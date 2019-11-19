@@ -1,12 +1,12 @@
-import { OnlyNumbers } from "../utils";
-import { IsNotEmpty } from "../validations/IsEmpty";
+import { sanitizeHtml } from ".";
 import { Trim } from "../format";
+import { OnlyNumbers } from "../format/number";
+import { IsNotEmpty } from "../validations/is-empty";
 
 const placeholder = { class: "", phone: { text: "", number: "" }, style: {}, user: "" };
 const fnPlaceholder = (v: string) => v;
 
 type StringMap = { [key: string]: string };
-type ParserParams = { colors?: StringMap };
 type FunctionMap = { [key: string]: (v: string) => string };
 type TPlaceholder = typeof placeholder;
 
@@ -32,8 +32,6 @@ const toSecureHttps = (str = "") => {
 	}
 	return str.startsWith("https://") ? str : `https://${str}`;
 };
-
-const sanitizeHTML = (str = "") => str.replace(/<[^>]*>/g, "");
 
 const codeMap: StringMap = {
 	"[line]": "<p>",
@@ -67,15 +65,14 @@ const openRegex = new RegExp(`\\[(${tags})( ?(${tagAttributes})=${quote}[${accep
 const closeRegex = new RegExp(`\\[/(${tags})]`, "gi");
 const tagParameters = /(\S+)=["']?((?:.(?!["']?\s+(?:\S+)=|[\]"']))+.)["']?/g;
 
-export const BbCodeParser = (params: ParserParams = {}) => (str: string) => {
-	const colors = params!.colors as any;
+export const BbCodeParser = (str: string) => {
 	const keyOperator: FunctionMap = {
 		class: (value) => value.trim(),
 		url: (value) => toSecureHttps(value),
 		phone: (value) => `https://wa.me/${OnlyNumbers(value)}`,
 		text: (value) => encodeURIComponent(clearQuote(value.trim())),
-		mark: (value) => (colors.hasOwnProperty(value) ? colors[value] : value),
-		color: (value) => (colors.hasOwnProperty(value) ? colors[value] : value)
+		mark: (value) => value,
+		color: (value) => value
 	};
 
 	const matchOpenCommands = (match: string) => {
@@ -125,9 +122,7 @@ export const BbCodeParser = (params: ParserParams = {}) => (str: string) => {
 		return `${openTag} ${innerAttributes}>`;
 	};
 
-	return Trim(sanitizeHTML(str))
+	return Trim(sanitizeHtml(str))
 		.replace(openRegex, matchOpenCommands)
 		.replace(closeRegex, matchCloseCommands);
 };
-
-export const bbCode = BbCodeParser();
