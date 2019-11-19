@@ -27,9 +27,9 @@ export const toDate = (date?: string, { showTodayAsDefault = false, format = "ZZ
 
 export const dateHour = (date?: string, { showTodayAsDefault = false, format = "ZZ", targetMask = BR_DATE_MASK }: TypeToDate = {}) => {
 	if (!!date) {
-		return moment(date, targetMask).format(BR_DATETIME_MASK);
+		return moment(date, format).format(targetMask);
 	}
-	return showTodayAsDefault ? today().format(BR_DATETIME_MASK) : "";
+	return showTodayAsDefault ? today().format(targetMask) : "";
 };
 
 export const toHour = (date: string, { showTodayAsDefault = false, format = "ZZ", targetMask = BR_HOUR_MASK }: TypeToDate = {}) => {
