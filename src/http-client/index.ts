@@ -62,7 +62,7 @@ const parseBodyRequest = (body: Object | any) => {
 	if (body === undefined || body === null) {
 		return null;
 	}
-	if (Array.isArray) {
+	if (Array.isArray(body)) {
 		return JSON.stringify(body);
 	}
 	if (body.toString() === "[Object object]") {
