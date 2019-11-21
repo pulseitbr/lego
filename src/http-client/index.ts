@@ -1,6 +1,7 @@
 import Header, { HeaderPropsConstructor } from "./header";
 
 type ResponseFetch = {
+	error: string | number | null;
 	ok: boolean;
 	data: unknown;
 	headers: any;
@@ -30,7 +31,9 @@ type RequestInterceptorParameter = {
 	method: HttpMethods;
 	url: string;
 };
+
 type RequestInterceptors = (request: RequestInterceptorParameter) => Promise<boolean>;
+
 type ResponseInterceptors = (response: ResponseFetch) => Promise<void>;
 
 type RequestParameters = {
@@ -40,6 +43,7 @@ type RequestParameters = {
 	timeout?: number;
 	retryAfter?: number;
 };
+
 type RequestConfig = {
 	timeout?: number;
 	retryStatusCode?: number[];
@@ -121,6 +125,7 @@ const HttpClient = (configuration: RequestConfig = {}) => {
 	let throwOnHttpError = getItem(configuration, "throwOnHttpError", true);
 	let globalTimeout = getItem(configuration, "timeout", 0);
 	let globalRetryCodes = getItem(configuration, "retryStatusCode", defaultStatusCodeRetry);
+
 	const header = new Header({
 		...headers,
 		"User-Agent": "hermes-http",
@@ -138,12 +143,10 @@ const HttpClient = (configuration: RequestConfig = {}) => {
 		body,
 		method = "GET",
 		retries,
-		// isFirst = false,
 		retryOnCodes,
 		retryAfter = 0,
 		signal
 	}: {
-		isFirst: boolean;
 		retryAfter: number;
 		url: string;
 		body: T | null;
@@ -202,7 +205,7 @@ const HttpClient = (configuration: RequestConfig = {}) => {
 				headers: { ...response.headers, "Content-Length": 0 },
 				ok: response.ok,
 				status: response.status,
-				statusText: response.statusText,
+				statusText: response.statusText
 			};
 			if (responseInterceptors !== null) {
 				responseInterceptors.forEach((callback) => callback(bodyError));
@@ -212,7 +215,7 @@ const HttpClient = (configuration: RequestConfig = {}) => {
 			}
 			setTimeout(
 				() =>
-					requestMethod({ url, retryAfter, body, method, retries: retries - 1, retryOnCodes, isFirst: false })
+					requestMethod({ url, retryAfter, body, method, retries: retries - 1, retryOnCodes })
 						.then(resolve)
 						.catch(reject),
 				retryAfter

@@ -19,5 +19,6 @@ export * from "./format/number";
 export * from "./tenants/";
 export * from "./tenants/profiles";
 export * from "./config";
+export { default as Uuid } from "./helpers/uuid";
 export { default as Colors } from "./config";
 export * from "./tenants/allow-view";
