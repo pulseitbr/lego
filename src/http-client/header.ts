@@ -20,6 +20,10 @@ export default class Header {
 		this.headers.append(header, `${value}`);
 	}
 
+	public getHeader(name: string) {
+		return this.headers.get(name);
+	}
+
 	public getPlainHeaders() {
 		const headers = {};
 		this.headers.forEach((value, header) => {

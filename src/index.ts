@@ -1,6 +1,6 @@
 export * from "./format";
-export * from "./env";
 export * from "./bowser";
+export * from "./env";
 export * from "./bowser/dimensions";
 export * from "./clock";
 export { default as HttpClient } from "./http-client";
