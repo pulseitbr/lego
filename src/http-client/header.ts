@@ -3,8 +3,10 @@ import { AnyText } from "../typings";
 export type HeaderPropsConstructor = { [key: string]: AnyText };
 
 export default class Header {
-	public headers: Headers;
-	constructor(headers: HeaderPropsConstructor & any) {
+
+	private headers: Headers;
+
+    constructor(headers: HeaderPropsConstructor & any) {
 		this.headers = new Headers();
 		this.headers.append("User-Agent", "hermes-http");
 		this.headers.append("connection", "keep-alive");
@@ -22,6 +24,10 @@ export default class Header {
 
 	public getHeader(name: string) {
 		return this.headers.get(name);
+	}
+
+	public getHeaders() {
+		return this.headers;
 	}
 
 	public getPlainHeaders() {
