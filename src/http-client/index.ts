@@ -1,97 +1,17 @@
-import Header, { HeaderPropsConstructor } from "./header";
-
-type ResponseFetch = Response & {
-	data: unknown;
-	error: string | number | null;
-	headers: Headers;
-	ok: boolean;
-	status: number;
-	statusText: string | null;
-};
-
-type HttpMethods = "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "OPTIONS" | "HEAD";
-
-type Cache = "default" | "no-store" | "reload" | "no-cache" | "force-cache" | "only-if-cached" | undefined;
-
-type Credentials = "same-origin" | "omit" | "include" | undefined;
-
-type ModeRequest = "same-origin" | "cors" | "navigate" | "no-cors" | undefined;
-
-type Redirect = "follow" | "error" | "manual" | undefined;
-
-type RequestInterceptorParameter = {
-	body: any;
-	cache: Cache;
-	credentials: Credentials;
-	headers: Headers;
-	keepalive: boolean;
-	method: HttpMethods;
-	mode: ModeRequest;
-	redirect: Redirect;
-	referrer: string;
-	url: string;
-};
-
-type RequestInterceptorReturnType = Promise<{
-	abort?: boolean;
-	request: {
-		body: any;
-		cache: Cache;
-		credentials: Credentials;
-		headers: Headers;
-		keepalive: boolean;
-		method: HttpMethods;
-		mode: ModeRequest;
-		redirect: Redirect;
-		referrer: string;
-		signal?: AbortSignal;
-		url: string;
-	};
-}>;
-
-type RequestInterceptors = (request: RequestInterceptorParameter) => RequestInterceptorReturnType;
-
-type ResponseInterceptors = (response: ResponseFetch) => Promise<ResponseFetch>;
-
-type RequestParameters = Partial<{
-	headers: Headers;
-	controller: AbortController;
-	retries: number;
-	retryAfter: number;
-	retryCodes: number[];
-	timeout: number;
-	rejectBase: boolean;
-}>;
-
-type RequestConfig = RequestInit &
-	Partial<{
-		authorization: string | null | undefined;
-		baseUrl: string;
-		headers: HeaderPropsConstructor;
-		requestInterceptors: RequestInterceptors[];
-		responseInterceptors: ResponseInterceptors[];
-		responseType: string;
-		retryStatusCode: number[];
-		throwOnHttpError: boolean;
-		timeout: number;
-	}>;
-
-type HttpClientReturn = {
-	addHeader: (key: string, value: string) => HttpClientReturn;
-	addRetryCodes: (code: number) => HttpClientReturn;
-	delete: <T>(url: string, body?: T, params?: RequestParameters) => Promise<ResponseFetch | unknown>;
-	get: (url: string, params?: RequestParameters) => Promise<ResponseFetch | unknown>;
-	getAuthorization: (key: string) => string;
-	getHeader: (key: string) => HttpClientReturn;
-	getRetryCodes: () => number[];
-	patch: <T>(url: string, body: T, params?: RequestParameters) => Promise<ResponseFetch | unknown>;
-	post: <T>(url: string, body: T, params?: RequestParameters) => Promise<ResponseFetch | unknown>;
-	put: <T>(url: string, body: T, params?: RequestParameters) => Promise<ResponseFetch | unknown>;
-	requestInterceptor: (interceptorFunction: RequestInterceptors) => HttpClientReturn;
-	responseInterceptor: (interceptorFunction: ResponseInterceptors) => HttpClientReturn;
-	setAuthorization: (token: string) => HttpClientReturn;
-	throwOnHttpError: (isThrow: boolean) => HttpClientReturn;
-};
+import Header from "./header";
+import {
+	Cache,
+	Credentials,
+	HttpClientReturn,
+	HttpMethods,
+	ModeRequest,
+	Redirect,
+	RequestConfig,
+	RequestInterceptors,
+	RequestParameters,
+	ResponseFetch,
+	ResponseInterceptors
+} from "./http-client";
 
 const timeoutError = {
 	data: null,
@@ -160,7 +80,7 @@ const HttpClient = (configuration: RequestConfig = {}) => {
 	let throwOnHttpError = getItem(configuration, "throwOnHttpError", true);
 	let baseUrl = getItem(configuration, "baseUrl", "");
 	let globalTimeout = getItem(configuration, "timeout", 0);
-	let globalRetryCodes = getItem(configuration, "retryStatusCode", defaultStatusCodeRetry);
+	let globalRetryCodes = getItem(configuration, "retryStatusCode", defaultStatusCodeRetry) as number[];
 
 	const header = new Header({
 		...defaultHeaders,
@@ -172,9 +92,10 @@ const HttpClient = (configuration: RequestConfig = {}) => {
 	});
 
 	const requestInterceptors: RequestInterceptors[] = getItem(configuration, "requestInterceptors", []);
-	const responseInterceptors: ResponseInterceptors[] = getItem(configuration, "responseInterceptors", []);
+	const errorResponseInterceptors: ResponseInterceptors[] = getItem(configuration, "errorResponseInterceptors", []);
+	const successResponseInterceptors: ResponseInterceptors[] = getItem(configuration, "successResponseInterceptors", []);
 
-	const requestMethod = <T>({
+	const requestMethod = async <T>({
 		url,
 		body,
 		method = "GET",
@@ -236,9 +157,8 @@ const HttpClient = (configuration: RequestConfig = {}) => {
 			const bodyData = await response[contentType]();
 
 			const responseHeaders = new Headers();
-
-			response.headers.forEach((value, key) => {
-				responseHeaders[key] = value;
+			response.headers.forEach((value, name) => {
+				responseHeaders.set(name, value);
 			});
 
 			if (response.ok) {
@@ -250,8 +170,9 @@ const HttpClient = (configuration: RequestConfig = {}) => {
 					status: response.status,
 					statusText: response.statusText
 				} as ResponseFetch;
-				return resolve(mutateResponse(responseReturn, responseInterceptors));
+				return resolve(mutateResponse(responseReturn, successResponseInterceptors));
 			}
+
 			let bodyError = {
 				data: bodyData,
 				error: response.statusText ?? response.status ?? "",
@@ -260,7 +181,7 @@ const HttpClient = (configuration: RequestConfig = {}) => {
 				status: response.status,
 				statusText: response.statusText
 			} as ResponseFetch;
-			bodyError = await mutateResponse(bodyError, responseInterceptors);
+			bodyError = await mutateResponse(bodyError, errorResponseInterceptors);
 
 			if (retries === 1) {
 				return throwOnHttpError ? reject(bodyError) : resolve(bodyError);
@@ -295,14 +216,23 @@ const HttpClient = (configuration: RequestConfig = {}) => {
 			timeout = globalTimeout,
 			retryCodes = globalRetryCodes,
 			headers = new Headers(),
-			retryAfter = 0
+			retryAfter = 0,
+			omitHeaders = []
 		}: RequestParameters
 	): Promise<ResponseFetch | unknown> => {
 		const signal = controller.signal;
+
+		omitHeaders.forEach((x) => {
+			if (headers.has(x)) {
+				headers.delete(x);
+			}
+		});
+
 		const parameters = { url, body, method, retries, isFirst: true, retryOnCodes: retryCodes, signal, retryAfter, headers, rejectBase };
 		if (timeout <= 0) {
 			return requestMethod(parameters);
 		}
+
 		return Promise.race([
 			requestMethod(parameters),
 			new Promise((_, reject) =>
@@ -328,7 +258,11 @@ const HttpClient = (configuration: RequestConfig = {}) => {
 			return [...globalRetryCodes];
 		},
 		addRetryCodes(...code: number[]) {
-			code.forEach(globalRetryCodes.push);
+			code.forEach((x) => {
+				if (!globalRetryCodes.includes(x)) {
+					globalRetryCodes.push(x);
+				}
+			});
 			return httpClientMethods;
 		},
 		requestInterceptor(interceptorFunction: RequestInterceptors) {
@@ -336,7 +270,7 @@ const HttpClient = (configuration: RequestConfig = {}) => {
 			return httpClientMethods;
 		},
 		responseInterceptor(interceptorFunction: ResponseInterceptors) {
-			responseInterceptors.push(interceptorFunction);
+			successResponseInterceptors.push(interceptorFunction);
 			return httpClientMethods;
 		},
 		addHeader(key: string, value: string) {
