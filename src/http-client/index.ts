@@ -1,10 +1,5 @@
 import Header, { HeaderPropsConstructor } from "./header";
 
-/*
-    ToDo:
-        - Interceptors de response irão retornar uma nova response
-*/
-
 type ResponseFetch = Response & {
 	data: unknown;
 	error: string | number | null;
@@ -58,13 +53,15 @@ type RequestInterceptors = (request: RequestInterceptorParameter) => RequestInte
 
 type ResponseInterceptors = (response: ResponseFetch) => Promise<ResponseFetch>;
 
-type RequestParameters = {
-	controller?: AbortController;
-	retries?: number;
-	retryAfter?: number;
-	retryCodes?: number;
-	timeout?: number;
-};
+type RequestParameters = Partial<{
+	headers: Headers;
+	controller: AbortController;
+	retries: number;
+	retryAfter: number;
+	retryCodes: number[];
+	timeout: number;
+	rejectBase: boolean;
+}>;
 
 type RequestConfig = RequestInit &
 	Partial<{
@@ -78,6 +75,23 @@ type RequestConfig = RequestInit &
 		throwOnHttpError: boolean;
 		timeout: number;
 	}>;
+
+type HttpClientReturn = {
+	addHeader: (key: string, value: string) => HttpClientReturn;
+	addRetryCodes: (code: number) => HttpClientReturn;
+	delete: <T>(url: string, body?: T, params?: RequestParameters) => Promise<ResponseFetch | unknown>;
+	get: (url: string, params?: RequestParameters) => Promise<ResponseFetch | unknown>;
+	getAuthorization: (key: string) => string;
+	getHeader: (key: string) => HttpClientReturn;
+	getRetryCodes: () => number[];
+	patch: <T>(url: string, body: T, params?: RequestParameters) => Promise<ResponseFetch | unknown>;
+	post: <T>(url: string, body: T, params?: RequestParameters) => Promise<ResponseFetch | unknown>;
+	put: <T>(url: string, body: T, params?: RequestParameters) => Promise<ResponseFetch | unknown>;
+	requestInterceptor: (interceptorFunction: RequestInterceptors) => HttpClientReturn;
+	responseInterceptor: (interceptorFunction: ResponseInterceptors) => HttpClientReturn;
+	setAuthorization: (token: string) => HttpClientReturn;
+	throwOnHttpError: (isThrow: boolean) => HttpClientReturn;
+};
 
 const timeoutError = {
 	data: null,
@@ -98,9 +112,7 @@ const responseTypes = [
 
 const defaultStatusCodeRetry = [408, 413, 429, 500, 502, 503, 504];
 
-const resolveUrl = (baseURL: string, relativeURL: string) => {
-	return relativeURL ? baseURL.replace(/\/+$/, "") + "/" + relativeURL.replace(/^\/+/, "") : baseURL;
-};
+const resolveUrl = (base: string, uri: string) => (uri ? `${base.replace(/\/+$/, "")}/${uri.replace(/^\/+/, "")}` : base);
 
 const defineParserFromMimeType = (value: string | undefined | null = "") => {
 	if (value === undefined || value === null) {
@@ -130,25 +142,20 @@ const parseBodyRequest = (body: Object | any) => {
 
 const getItem = (config: RequestConfig | undefined, item: keyof RequestConfig, def?: any) => config![item] ?? def;
 
-type HttpClientReturn = {
-	get: (url: string, params?: RequestParameters) => Promise<any>;
-	put: <T>(url: string, body: T, params?: RequestParameters) => Promise<any>;
-	post: <T>(url: string, body: T, params?: RequestParameters) => Promise<any>;
-	patch: <T>(url: string, body: T, params?: RequestParameters) => Promise<any>;
-	delete: <T>(url: string, body?: T, params?: RequestParameters) => Promise<any>;
-	throwOnHttpError: (isThrow: boolean) => HttpClientReturn;
-	getRetryCodes: () => number[];
-	addRetryCodes: (code: number) => HttpClientReturn;
-	requestInterceptor: (interceptorFunction: RequestInterceptors) => HttpClientReturn;
-	responseInterceptor: (interceptorFunction: ResponseInterceptors) => HttpClientReturn;
-	addHeader: (key: string, value: string) => HttpClientReturn;
-	setAuthorization: (token: string) => HttpClientReturn;
-	getAuthorization: (key: string) => string;
-	getHeader: (key: string) => HttpClientReturn;
+const mutateResponse = async <T extends Function>(response: ResponseFetch, interceptors: T[]): Promise<ResponseFetch> => {
+	for (const callback of interceptors) {
+		try {
+			const responseMutate = await callback(response);
+			response = { ...response, ...responseMutate };
+		} catch (error) {
+			response = { ...response, ...error };
+		}
+	}
+	return response;
 };
 
 const HttpClient = (configuration: RequestConfig = {}) => {
-	const headers = getItem(configuration, "headers", {});
+	const defaultHeaders = getItem(configuration, "headers", {});
 	let abortRequest = false;
 	let throwOnHttpError = getItem(configuration, "throwOnHttpError", true);
 	let baseUrl = getItem(configuration, "baseUrl", "");
@@ -156,7 +163,7 @@ const HttpClient = (configuration: RequestConfig = {}) => {
 	let globalRetryCodes = getItem(configuration, "retryStatusCode", defaultStatusCodeRetry);
 
 	const header = new Header({
-		...headers,
+		...defaultHeaders,
 		"User-Agent": "hermes-http",
 		connection: "keep-alive",
 		Accept: "application/json, text/plain, */*",
@@ -172,31 +179,39 @@ const HttpClient = (configuration: RequestConfig = {}) => {
 		body,
 		method = "GET",
 		retries,
+		rejectBase,
+		headers,
 		retryOnCodes,
 		retryAfter = 0,
 		signal
 	}: {
 		retryAfter: number;
+		rejectBase: boolean;
 		url: string;
 		body: T | null;
 		method: HttpMethods;
 		retries: number;
+		headers: Headers;
 		retryOnCodes: number[];
 		signal?: AbortSignal;
 	}): Promise<Response> => {
 		return new Promise(async (resolve, reject) => {
+			headers.forEach((value, key) => {
+				header.getHeaders().set(key, value);
+			});
 			let request = {
 				body: parseBodyRequest(body),
-				cache: "default" as Cache,
+				cache: "no-store" as Cache,
 				credentials: "same-origin" as Credentials,
 				headers: header.getHeaders(),
 				keepalive: false,
 				method,
 				mode: "cors" as ModeRequest,
 				redirect: "follow" as Redirect,
-				referrer: "origin",
+				referrer: "no-referrer",
 				signal
 			};
+
 			for (const callback of requestInterceptors) {
 				try {
 					const promiseValue = await callback({ ...request, url });
@@ -213,7 +228,7 @@ const HttpClient = (configuration: RequestConfig = {}) => {
 				return throwOnHttpError ? reject(bodyError) : resolve(bodyError);
 			}
 
-			const requestUrl = resolveUrl(baseUrl, url);
+			const requestUrl = rejectBase ? url : resolveUrl(baseUrl, url);
 
 			let response = (await fetch(requestUrl, request)) as ResponseFetch;
 
@@ -235,17 +250,8 @@ const HttpClient = (configuration: RequestConfig = {}) => {
 					status: response.status,
 					statusText: response.statusText
 				} as ResponseFetch;
-				for (const callback of responseInterceptors) {
-					try {
-						const responseMutate = await callback(responseReturn);
-						responseReturn = { ...responseReturn, ...responseMutate };
-					} catch (error) {
-						responseReturn = { ...responseReturn, ...error };
-					}
-				}
-				return resolve(responseReturn);
+				return resolve(mutateResponse(responseReturn, responseInterceptors));
 			}
-
 			let bodyError = {
 				data: bodyData,
 				error: response.statusText ?? response.status ?? "",
@@ -254,22 +260,23 @@ const HttpClient = (configuration: RequestConfig = {}) => {
 				status: response.status,
 				statusText: response.statusText
 			} as ResponseFetch;
-
-			for (const callback of responseInterceptors) {
-				try {
-					const responseMutate = await callback(response);
-					bodyError = { ...bodyError, ...responseMutate };
-				} catch (error) {
-					bodyError = { ...bodyError, ...error };
-				}
-			}
+			bodyError = await mutateResponse(bodyError, responseInterceptors);
 
 			if (retries === 1) {
 				return throwOnHttpError ? reject(bodyError) : resolve(bodyError);
 			}
 			setTimeout(
 				() =>
-					requestMethod({ url, retryAfter, body, method, retries: retries - 1, retryOnCodes: retryOnCodes.concat(globalRetryCodes) })
+					requestMethod({
+						rejectBase,
+						url,
+						headers,
+						retryAfter,
+						body,
+						method,
+						retries: retries - 1,
+						retryOnCodes: retryOnCodes.concat(globalRetryCodes)
+					})
 						.then(resolve)
 						.catch(reject),
 				retryAfter
@@ -277,10 +284,22 @@ const HttpClient = (configuration: RequestConfig = {}) => {
 		});
 	};
 
-	const exec = async <T>(url: string, body: T | null, method: HttpMethods = "GET", params: RequestParameters): Promise<ResponseFetch | unknown> => {
-		const { retries = 0, controller = new AbortController(), timeout = globalTimeout, retryCodes = globalRetryCodes, retryAfter = 0 } = params;
+	const exec = async <T>(
+		url: string,
+		body: T | null,
+		method: HttpMethods = "GET",
+		{
+			rejectBase = false,
+			retries = 0,
+			controller = new AbortController(),
+			timeout = globalTimeout,
+			retryCodes = globalRetryCodes,
+			headers = new Headers(),
+			retryAfter = 0
+		}: RequestParameters
+	): Promise<ResponseFetch | unknown> => {
 		const signal = controller.signal;
-		const parameters = { url, body, method, retries, isFirst: true, retryOnCodes: retryCodes, signal, retryAfter };
+		const parameters = { url, body, method, retries, isFirst: true, retryOnCodes: retryCodes, signal, retryAfter, headers, rejectBase };
 		if (timeout <= 0) {
 			return requestMethod(parameters);
 		}
@@ -308,8 +327,8 @@ const HttpClient = (configuration: RequestConfig = {}) => {
 		getRetryCodes() {
 			return [...globalRetryCodes];
 		},
-		addRetryCodes(code: number) {
-			globalRetryCodes.push(code);
+		addRetryCodes(...code: number[]) {
+			code.forEach(globalRetryCodes.push);
 			return httpClientMethods;
 		},
 		requestInterceptor(interceptorFunction: RequestInterceptors) {
