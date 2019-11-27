@@ -1,9 +1,25 @@
-import { HeaderPropsConstructor } from "./header";
+export type AnyText = string | number;
+
+export type FetchParseBodyMethods = "json" | "text" | "formData" | "arrayBuffer" | "blob";
+
+export type HeaderPropsConstructor = { [key: string]: AnyText };
+
+export type RawHeaders = { [key: string]: AnyText };
+
+export type DownloadTrackerParameters = {
+	percent: number;
+	transferred: number;
+	total: number;
+	done: boolean;
+};
+
+export type DownloadTracker = (parameters: DownloadTrackerParameters, bytes: Uint8Array) => void;
 
 export type ResponseFetch = Response & {
+	url: string;
 	data: unknown;
 	error: string | number | null;
-	headers: Headers;
+	headers: { [key: string]: string };
 	ok: boolean;
 	status: number;
 	statusText: string | null;
@@ -53,7 +69,24 @@ export type RequestInterceptors = (request: RequestInterceptorParameter) => Requ
 
 export type ResponseInterceptors = (response: ResponseFetch) => Promise<ResponseFetch>;
 
+export type ExecRequest<T> = {
+	onDownload?: DownloadTracker;
+	query?: string;
+	retryAfter: number;
+	url: string;
+	body: T | null;
+	method: HttpMethods;
+	retries: number;
+	headers: Headers;
+	retryOnCodes: number[];
+	signal?: AbortSignal;
+};
+
 export type RequestParameters = Partial<{
+	query: { [key: string]: unknown };
+	encodeQueryString: boolean;
+	onDownload: DownloadTracker;
+	arrayFormatQueryString: "brackets" | "index" | "commas" | undefined;
 	headers: Headers;
 	controller: AbortController;
 	retries: number;
@@ -64,31 +97,31 @@ export type RequestParameters = Partial<{
 	rejectBase: boolean;
 }>;
 
-export type RequestConfig = RequestInit &
-	Partial<{
-		authorization: string | null | undefined;
-		baseUrl: string;
-		headers: HeaderPropsConstructor;
-		requestInterceptors: RequestInterceptors[];
-		successResponseInterceptors: ResponseInterceptors[];
-		errorResponseInterceptors: ResponseInterceptors[];
-		responseType: string;
-		retryStatusCode: number[];
-		throwOnHttpError: boolean;
-		timeout: number;
-	}>;
+export type HermesConfig = Partial<{
+	fetchInstance: any;
+	authorization: string | null | undefined;
+	baseUrl: string;
+	headers: HeaderPropsConstructor;
+	requestInterceptors: RequestInterceptors[];
+	successResponseInterceptors: ResponseInterceptors[];
+	errorResponseInterceptors: ResponseInterceptors[];
+	responseType: string;
+	retryStatusCode: number[];
+	throwOnHttpError: boolean;
+	timeout: number;
+}>;
 
 export type HttpClientReturn = {
 	addHeader: (key: string, value: string) => HttpClientReturn;
 	addRetryCodes: (code: number) => HttpClientReturn;
-	delete: <T>(url: string, body?: T, params?: RequestParameters) => Promise<ResponseFetch | unknown>;
-	get: (url: string, params?: RequestParameters) => Promise<ResponseFetch | unknown>;
+	delete: <T>(url: string, body?: T, params?: RequestParameters) => Promise<ResponseFetch>;
+	get: (url: string, params?: RequestParameters) => Promise<ResponseFetch>;
 	getAuthorization: (key: string) => string;
 	getHeader: (key: string) => HttpClientReturn;
 	getRetryCodes: () => number[];
-	patch: <T>(url: string, body: T, params?: RequestParameters) => Promise<ResponseFetch | unknown>;
-	post: <T>(url: string, body: T, params?: RequestParameters) => Promise<ResponseFetch | unknown>;
-	put: <T>(url: string, body: T, params?: RequestParameters) => Promise<ResponseFetch | unknown>;
+	patch: <T>(url: string, body: T, params?: RequestParameters) => Promise<ResponseFetch>;
+	post: <T>(url: string, body: T, params?: RequestParameters) => Promise<ResponseFetch>;
+	put: <T>(url: string, body: T, params?: RequestParameters) => Promise<ResponseFetch>;
 	requestInterceptor: (interceptorFunction: RequestInterceptors) => HttpClientReturn;
 	responseInterceptor: (interceptorFunction: ResponseInterceptors) => HttpClientReturn;
 	setAuthorization: (token: string) => HttpClientReturn;

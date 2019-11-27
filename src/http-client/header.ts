@@ -1,16 +1,13 @@
-import { AnyText } from "../typings";
-
-export type HeaderPropsConstructor = { [key: string]: AnyText };
-
+import { AnyText, HeaderPropsConstructor, RawHeaders } from "./http-client-types";
 export default class Header {
-
 	private headers: Headers;
 
-    constructor(headers: HeaderPropsConstructor & any) {
+	public constructor(headers: HeaderPropsConstructor & any) {
 		this.headers = new Headers();
 		this.headers.append("User-Agent", "hermes-http");
 		this.headers.append("connection", "keep-alive");
 		this.headers.append("Accept-Encoding", "gzip, deflate, br");
+		this.headers.append("Accept", "application/json, text/plain, */*");
 		Object.entries(headers).forEach(([key, value]) => this.headers.append(key, `${value}`));
 	}
 
@@ -31,7 +28,7 @@ export default class Header {
 	}
 
 	public getPlainHeaders() {
-		const headers = {};
+		const headers: RawHeaders = {};
 		this.headers.forEach((value, header) => {
 			headers[header] = value;
 		});
