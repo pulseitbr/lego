@@ -20,17 +20,14 @@ export default function App() {
 
 	useEffect(() => {
 		hermes
-			.get("cliente/endereco/cliente/500668", { retries: 3, retryAfter: 500 })
+			.post("/cliente/search", { nome: "fernando", numeroDocumento: "" })
 			.then((e) => {
 				console.log("API", e);
 				setR(JSON.stringify(e, null, 4));
 			})
 			.catch((e) => {
-				setR(JSON.stringify(e, null, 4));
+				console.log(e);
 			});
-		HttpClient.get("https://api.postmon.com.br/v1/cep/36080000", { retries: 3, retryAfter: 500, rejectBase: true }).then((e) => {
-			console.log("CEP", e);
-		});
 	}, []);
 	return (
 		<pre>
