@@ -1,4 +1,4 @@
-import moment from "moment";
+import dayjs from "dayjs";
 
 export const BR_DATE_MASK = "DD/MM/YYYY";
 export const ISO_DATE_MASK = "YYYY-MM-DD";
@@ -8,7 +8,7 @@ export const BR_HOUR_MASK = "HH:mm";
 export const ISO_DATETIME_MASK_BEGIN = "YYYY-MM-DDT00:00:00";
 export const ISO_DATETIME_MASK_end = "YYYY-MM-DDT23:59:59";
 
-export const today = () => moment();
+export const today = () => dayjs(new Date());
 export const isoTodayInit = () => today().format(`${ISO_DATE_MASK}T00:00:00`);
 export const isoTodayEnd = () => today().format(`${ISO_DATE_MASK}T23:59:59`);
 
@@ -20,21 +20,21 @@ export const isoBeginDateTime = (mask: string = ISO_DATETIME_MASK) => today().fo
 
 export const toDate = (date?: string, { showTodayAsDefault = false, format = "ZZ", targetMask = BR_DATE_MASK }: TypeToDate = {}) => {
 	if (!!date) {
-		return moment(date, format).format(targetMask);
+		return dayjs(date, format).format(targetMask);
 	}
 	return showTodayAsDefault ? today().format(targetMask) : "";
 };
 
 export const dateHour = (date?: string, { showTodayAsDefault = false, format = "ZZ", targetMask = BR_DATE_MASK }: TypeToDate = {}) => {
 	if (!!date) {
-		return moment(date, format).format(targetMask);
+		return dayjs(date, format).format(targetMask);
 	}
 	return showTodayAsDefault ? today().format(targetMask) : "";
 };
 
 export const toHour = (date: string, { showTodayAsDefault = false, format = "ZZ", targetMask = BR_HOUR_MASK }: TypeToDate = {}) => {
 	if (!!date) {
-		return moment(date, format).format(targetMask);
+		return dayjs(date, format).format(targetMask);
 	}
 	return showTodayAsDefault ? today().format(targetMask) : "";
 };
