@@ -63,3 +63,5 @@ export const CamelCase = (text: string) => {
 };
 
 export const HideMask = (text: string, padding: string, maskChar = "*") => `${text}`.slice(-padding).padStart(`${text}`.length, maskChar);
+
+export const Capitalize = (chars: string) => chars.charAt(0).toUpperCase() + chars.substring(1).toLowerCase();
