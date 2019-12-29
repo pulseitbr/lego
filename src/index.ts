@@ -11,6 +11,7 @@ export * from "./format/br-format";
 export * from "./helpers/debounce";
 export * from "./helpers/throttle";
 export * from "./validations";
+export * from "./format/url";
 export { BbCodeParser } from "./html/bbcode";
 export { default as ViewOnProfile } from "./tenants/allow-view";
 export { Profile, ProfileAlias } from "./tenants/profiles";
