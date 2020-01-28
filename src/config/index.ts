@@ -57,10 +57,13 @@ export type TypeColors = {
 	disabledDarkest: string;
 };
 
-declare const CONFIG_THEME: {
+declare const BP_CONFIG: {
 	tenant: string;
 	version: string;
 	config: {
+		svgCard: string;
+		baseUrl: string;
+		gratuityCard: string;
 		theme: TypeColors;
 		icon: string;
 		logo: string;
@@ -76,17 +79,18 @@ declare const CONFIG_THEME: {
 
 declare global {
 	interface Window {
-		$__BP__: typeof CONFIG_THEME;
+		$__BP__: typeof BP_CONFIG;
 	}
 }
 
-const emptyGlobalBP = IsEmpty(window.$__BP__);
-
-if (emptyGlobalBP) {
+if (IsEmpty(window.$__BP__)) {
 	window.$__BP__ = {
 		tenant: "",
 		version: "",
 		config: {
+			svgCard: "",
+			gratuityCard: "",
+			baseUrl: "",
 			icon: "",
 			logo: "",
 			card: "",
@@ -101,15 +105,16 @@ if (emptyGlobalBP) {
 	};
 }
 
-const BP_PLACEHOLDER = window.$__BP__;
-export const $__BP__: typeof CONFIG_THEME = {
-	...BP_PLACEHOLDER,
+const BP_TENANT_CONFIG = window.$__BP__;
+export const $__BP__: typeof BP_CONFIG = {
+	...BP_TENANT_CONFIG,
 	config: {
-		...BP_PLACEHOLDER.config,
-		theme: BP_PLACEHOLDER.config.theme
+		...BP_TENANT_CONFIG.config,
+		theme: BP_TENANT_CONFIG.config.theme
 	}
 };
 
 const Colors = $__BP__.config.theme;
+export const BASE_URL = $__BP__.config.baseUrl;
 
 export default Colors;

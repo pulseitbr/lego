@@ -1,5 +1,5 @@
 import { Tenants } from ".";
-import { Profile } from "./profiles";
+import { Profile } from "./model/user/profiles";
 
 type Props = {
 	allowedProfiles: Profile[];

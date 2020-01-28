@@ -20,3 +20,5 @@ export const MidiaAppId = {
 };
 
 export const ModalByTenant = { name: TENANT, code: MidiaAppId[TENANT] };
+
+export const IsMobifacil = () => TENANT === Tenants.mobifacil;

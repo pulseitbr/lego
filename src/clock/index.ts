@@ -8,33 +8,33 @@ export const BR_HOUR_MASK = "HH:mm";
 export const ISO_DATETIME_MASK_BEGIN = "YYYY-MM-DDT00:00:00";
 export const ISO_DATETIME_MASK_end = "YYYY-MM-DDT23:59:59";
 
-export const today = () => dayjs(new Date());
-export const isoTodayInit = () => today().format(`${ISO_DATE_MASK}T00:00:00`);
-export const isoTodayEnd = () => today().format(`${ISO_DATE_MASK}T23:59:59`);
+export const Today = () => dayjs(new Date());
+export const IsoTodayInit = () => Today().format(`${ISO_DATE_MASK}T00:00:00`);
+export const IsoTodayEnd = () => Today().format(`${ISO_DATE_MASK}T23:59:59`);
 
 type TypeToDate = { showTodayAsDefault?: boolean; format?: string; targetMask?: string };
 
-export const isoDateTime = (mask: string = ISO_DATETIME_MASK) => today().format(mask);
+export const IsoDateTime = (mask: string = ISO_DATETIME_MASK) => Today().format(mask);
 
-export const isoBeginDateTime = (mask: string = ISO_DATETIME_MASK) => today().format(mask);
+export const IsoBeginDateTime = (mask: string = ISO_DATETIME_MASK) => Today().format(mask);
 
-export const toDate = (date?: string, { showTodayAsDefault = false, format = "ZZ", targetMask = BR_DATE_MASK }: TypeToDate = {}) => {
+export const ToDate = (date?: string, { showTodayAsDefault = false, format = "ZZ", targetMask = BR_DATE_MASK }: TypeToDate = {}) => {
 	if (!!date) {
 		return dayjs(date, format).format(targetMask);
 	}
-	return showTodayAsDefault ? today().format(targetMask) : "";
+	return showTodayAsDefault ? Today().format(targetMask) : "";
 };
 
-export const dateHour = (date?: string, { showTodayAsDefault = false, format = "ZZ", targetMask = BR_DATE_MASK }: TypeToDate = {}) => {
+export const DateHour = (date?: string, { showTodayAsDefault = false, format = "ZZ", targetMask = BR_DATE_MASK }: TypeToDate = {}) => {
 	if (!!date) {
 		return dayjs(date, format).format(targetMask);
 	}
-	return showTodayAsDefault ? today().format(targetMask) : "";
+	return showTodayAsDefault ? Today().format(targetMask) : "";
 };
 
-export const toHour = (date: string, { showTodayAsDefault = false, format = "ZZ", targetMask = BR_HOUR_MASK }: TypeToDate = {}) => {
+export const ToHour = (date: string, { showTodayAsDefault = false, format = "ZZ", targetMask = BR_HOUR_MASK }: TypeToDate = {}) => {
 	if (!!date) {
 		return dayjs(date, format).format(targetMask);
 	}
-	return showTodayAsDefault ? today().format(targetMask) : "";
+	return showTodayAsDefault ? Today().format(targetMask) : "";
 };
