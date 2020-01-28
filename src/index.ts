@@ -22,7 +22,7 @@ export * from "./helpers/promise";
 export * from "./tenants/allow-view";
 export { default as ViewOnProfile } from "./tenants/allow-view";
 export * from "./tenants/model/user/profiles";
-export * from "./tenants/model/user/profiles";
+export * from "./tenants";
 export * from "./validations";
 export * from "./tenants/model/card/cartao";
 export * from "./tenants/model/card/modelo-produto";
