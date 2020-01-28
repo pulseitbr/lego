@@ -6,7 +6,9 @@ export class UrlBuilder {
 		this.url = new URL(href);
 	}
 	public addParameter(name: string, value: string) {
-		this.url.searchParams.append(name, value);
+		if (!!value) {
+			this.url.searchParams.append(name, value);
+		}
 		return this;
 	}
 	public removeParameter(name: string) {
