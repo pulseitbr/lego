@@ -8,7 +8,5 @@ type Props = {
 	tenant: Tenants;
 };
 
-const AllowView = ({ allowedProfiles, allowedTenants, profiles, tenant }: Props) =>
+export const AllowView = ({ allowedProfiles, allowedTenants, profiles, tenant }: Props) =>
 	allowedProfiles.some((allowed) => profiles.some((profile) => profile === allowed)) && allowedTenants.includes(tenant);
-
-export default AllowView;

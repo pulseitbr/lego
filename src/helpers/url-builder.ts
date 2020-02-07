@@ -5,32 +5,32 @@ export class UrlBuilder {
 	public constructor(href: string) {
 		this.url = new URL(href);
 	}
-	public addParameter(name: string, value: string) {
+	public AddParameter(name: string, value: string) {
 		if (!!value) {
 			this.url.searchParams.append(name, value);
 		}
 		return this;
 	}
-	public removeParameter(name: string) {
+	public RemoveParameter(name: string) {
 		this.url.searchParams.delete(name);
 		return this;
 	}
-	public addUser(user: string) {
+	public AddUser(user: string) {
 		this.url.username = user;
 		return this;
 	}
-	public addPassword(password: string) {
+	public AddPassword(password: string) {
 		this.url.password = password;
 		return this;
 	}
-	public setBaseUrl(url: string) {
+	public SetBaseUrl(url: string) {
 		this.url.href = url;
 		return this;
 	}
-	public build() {
+	public Build() {
 		return this.url.href;
 	}
-	public getParameters() {
+	public GetParameters() {
 		return UrlParameters(this.url.href);
 	}
 }

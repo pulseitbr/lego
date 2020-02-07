@@ -1,9 +1,8 @@
 export const throttle = (fn: Function, delay: number) => {
 	let isThrottle: boolean, timer: any, last: number;
-	return function() {
+	return (...args: any[]) => {
 		//@ts-ignore
 		const context = this;
-		const args = arguments;
 		if (!isThrottle) {
 			fn.apply(context, args);
 			last = Date.now();

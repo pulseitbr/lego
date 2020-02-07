@@ -20,7 +20,6 @@ export { default as Console } from "./html/console";
 export { default as HttpClient } from "./http-client";
 export * from "./helpers/promise";
 export * from "./tenants/allow-view";
-export { default as ViewOnProfile } from "./tenants/allow-view";
 export * from "./tenants/model/user/profiles";
 export * from "./tenants";
 export * from "./validations";
