@@ -1,5 +1,7 @@
 import { IsMobifacil, TENANT, Tenants } from "../..";
 import { ToInt } from "../../../format/number";
+import Favorecido from "../user/favorecido";
+import { Maybe } from "../../../typings";
 
 export const GetApplicationIdByTenant = () => (IsMobifacil ? 1 : 100);
 
@@ -11,6 +13,19 @@ export enum IdItemPedido {
 	PRODUTO_E_CREDITO = 5,
 	SEGUNDA_VIA = 6
 }
+
+export const getItemTypeOrder = (person: Favorecido): Maybe<IdItemPedido> => {
+	if (person.cartao !== null) {
+		return IdItemPedido.CREDITO_MIDIA;
+	}
+	if (person.cartao === null && person.solicitarSegundaVia) {
+		return IdItemPedido.SEGUNDA_VIA;
+	}
+	if (person.cartao === null && person.solicitarPrimeiraVia) {
+		return IdItemPedido.PRODUTO_E_CREDITO;
+	}
+	return null;
+};
 
 export const IdAplicacaoPrompt = () => {
 	if (TENANT === Tenants.dev) {

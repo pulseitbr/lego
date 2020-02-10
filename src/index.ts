@@ -26,6 +26,6 @@ export * from "./tenants/model/card/modelo-produto";
 export * from "./tenants/model/pedidos/item-pedido";
 export * from "./tenants/model/pedidos/pedido";
 export * from "./tenants/model/pedidos/tipo-pagamento";
-export * from "./tenants/model/user/account";
+export * from "./tenants/model/user/conta";
 export * from "./tenants/model/user/profiles";
 export * from "./validations";

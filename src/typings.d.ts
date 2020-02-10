@@ -17,3 +17,5 @@ declare module "*.svg" {
 }
 
 export type AnyText = string | number | boolean;
+
+export type Maybe<T> = T | null | undefined;
