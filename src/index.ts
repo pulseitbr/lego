@@ -10,6 +10,7 @@ export * from "./format";
 export * from "./format/br-format";
 export * from "./format/number";
 export * from "./format/url";
+export * from "./helpers/pipe";
 export * from "./helpers/debounce";
 export * from "./helpers/promise";
 export * from "./helpers/query-string";
