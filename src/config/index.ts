@@ -1,5 +1,6 @@
 import ThemeConfig from "./default";
 import { IsEmpty } from "../validations";
+
 export type TypeColors = {
 	primary: string;
 	primaryAlpha: string;
@@ -106,6 +107,7 @@ if (IsEmpty(window.$__BP__)) {
 }
 
 const BP_TENANT_CONFIG = window.$__BP__;
+
 export const $__BP__: typeof BP_CONFIG = {
 	...BP_TENANT_CONFIG,
 	config: {
@@ -115,6 +117,7 @@ export const $__BP__: typeof BP_CONFIG = {
 };
 
 const Colors = $__BP__.config.theme;
+
 export const BASE_URL = $__BP__.config.baseUrl;
 
 export default Colors;
