@@ -62,19 +62,20 @@ declare const BP_CONFIG: {
 	tenant: string;
 	version: string;
 	config: {
-		svgCard: string;
-		baseUrl: string;
-		gratuityCard: string;
-		theme: TypeColors;
-		icon: string;
-		logo: string;
-		card: string;
-		logo2: string;
-		tenant: string;
-		favicon: string;
-		cardBack: string;
-		theme_color: string;
 		background_color: string;
+		baseUrl: string;
+		card: string;
+		cardBack: string;
+		favicon: string;
+		gratuityCard: string;
+		icon: string;
+		loginUrl: string;
+		logo: string;
+		logo2: string;
+		svgCard: string;
+		tenant: string;
+		theme_color: string;
+		theme: TypeColors;
 	};
 };
 
@@ -89,18 +90,19 @@ if (IsEmpty(window.$__BP__)) {
 		tenant: "",
 		version: "",
 		config: {
-			svgCard: "",
-			gratuityCard: "",
+			background_color: "",
 			baseUrl: "",
+			card: "",
+			cardBack: "",
+			favicon: "",
+			gratuityCard: "",
 			icon: "",
 			logo: "",
-			card: "",
 			logo2: "",
+			svgCard: "",
 			tenant: "",
-			favicon: "",
-			cardBack: "",
 			theme_color: "",
-			background_color: "",
+			loginUrl: "",
 			theme: ThemeConfig as TypeColors
 		}
 	};
