@@ -4,7 +4,6 @@ export { default as Dimensions } from "./bowser/dimensions";
 export { default as Keyboard } from "./bowser/keyboard";
 export * from "./clock";
 export * from "./config";
-export { default as Colors } from "./config";
 export * from "./env";
 export * from "./format";
 export * from "./format/br-format";
