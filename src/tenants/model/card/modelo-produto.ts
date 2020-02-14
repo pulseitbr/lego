@@ -1,7 +1,8 @@
 import { Cartao } from "./cartao";
 import { $__BP__ } from "../../../config";
 import { ToInt } from "../../../format/number";
-const { gratuityCard, svgCard } = $__BP__.config;
+const { gratuityCard, card: svgCard } = $__BP__.config;
+
 enum ModeloProduto {
 	Transporte = 1,
 	VT = 2,
@@ -17,6 +18,11 @@ export const CardImageById = {
 	4: svgCard as string,
 	5: gratuityCard as string
 };
+
+export const OrderCards = [
+	{ id: ModeloProduto.Transporte, img: CardImageById[ModeloProduto.Transporte] },
+	{ id: ModeloProduto.GratuidadeEstudante, img: CardImageById[ModeloProduto.GratuidadeEstudante] }
+];
 
 export default ModeloProduto;
 
