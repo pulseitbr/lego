@@ -118,10 +118,9 @@ export const $__BP__: typeof BP_CONFIG = {
 	}
 };
 
-const Colors = $__BP__.config.theme;
+export const Colors = $__BP__.config.theme;
 
 export const BASE_URL = $__BP__.config.baseUrl;
 
 export const LOGIN_URL = $__BP__.config.loginUrl;
 
-export default Colors;
