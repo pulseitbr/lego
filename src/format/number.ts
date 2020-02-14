@@ -14,9 +14,15 @@ export const ToNumber = (number: string | number = "", precision = 2) => new Dec
 
 export const ToFloat = (number: string) => Number.parseFloat(ToNumberString(number));
 
+export const CurrencyToFloatString = (value: string | number) =>
+	`${value}`
+		.replace(/[A-Z$ ]+([\d.]+),(\d+)/, "$1,$2")
+		.replace(/\./gi, "")
+		.replace(/,/, ".");
+
 export const FormatCurrencyFloor = (value: string | number, precision: number = 3, currency: string = "BRL") => {
 	const str = new Intl.NumberFormat("pt-BR", { style: "currency", currency, minimumFractionDigits: precision }).format(
-		new Decimal(value)
+		new Decimal(CurrencyToFloatString(value))
 			.toDecimalPlaces(precision)
 			.toDP(precision)
 			.toNumber()
