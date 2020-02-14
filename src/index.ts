@@ -29,5 +29,6 @@ export * from "./tenants/model/pedidos/pedido";
 export * from "./tenants/model/pedidos/tipo-pagamento";
 export * from "./tenants/model/user/conta";
 export * from "./tenants/model/user/profiles";
+export * from "./tenants/model/user/favorecido";
 export * from "./validations";
 export * from "./validations/validate";
