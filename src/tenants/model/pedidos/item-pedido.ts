@@ -1,6 +1,6 @@
 import { IsMobifacil, TENANT, Tenants } from "../..";
 import { ToInt } from "../../../format/number";
-import Favorecido from "../user/favorecido";
+import { Favorecido } from "../user/favorecido";
 import { Maybe } from "../../../typings";
 
 export const GetApplicationIdByTenant = () => (IsMobifacil ? 1 : 100);
@@ -65,7 +65,7 @@ export class ItemPedido {
 		this.valorProduto = props.valorProduto || 0;
 		this.idItem = props.idItem || null;
 		this.idPedido = props.idPedido || null;
-		this.idAplicacao = props.idAplicacao || GetApplicationIdByTenant();
+		this.idAplicacao = props.idAplicacao || IdAplicacaoPrompt();
 		this.idModeloProduto = props.idModeloProduto || 1;
 		this.idMotivoCancelamento = props.idMotivoCancelamento || 0;
 		this.idTipoItemPedido = props.idTipoItemPedido || 0;

@@ -8,7 +8,7 @@ export const filterToOrder = (x: Favorecido) => {
 	return x.solicitarPrimeiraVia || x.solicitarSegundaVia;
 };
 
-export default class Favorecido {
+export class Favorecido {
 	public cartao?: Cartao | null;
 	public idClientePrincipal: number;
 	public idClienteFavorecido: number;
