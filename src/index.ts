@@ -24,6 +24,7 @@ export * from "./tenants/allow-view";
 export * from "./tenants/model/card/cartao";
 export * from "./tenants/model/card/modelo-produto";
 export * from "./tenants/model/pedidos/item-pedido";
+export * from "./tenants/model/pedidos/pedido-consulta";
 export * from "./tenants/model/pedidos/pedido";
 export * from "./tenants/model/pedidos/tipo-pagamento";
 export * from "./tenants/model/user/conta";

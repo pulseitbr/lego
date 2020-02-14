@@ -3,7 +3,7 @@ import { $__BP__ } from "../../../config";
 import { ToInt } from "../../../format/number";
 const { gratuityCard, card: svgCard } = $__BP__.config;
 
-enum ModeloProduto {
+export enum ModeloProduto {
 	Transporte = 1,
 	VT = 2,
 	Operador = 3,
