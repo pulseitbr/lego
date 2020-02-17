@@ -11,7 +11,8 @@ export enum IdItemPedido {
 	PRODUTO = 3,
 	SERVICO = 4,
 	PRODUTO_E_CREDITO = 5,
-	SEGUNDA_VIA = 6
+	SEGUNDA_VIA = 6,
+	TAXA_ENTREGA = 7
 }
 
 export const getItemTypeOrder = (person: Favorecido): Maybe<IdItemPedido> => {
