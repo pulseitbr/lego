@@ -1,5 +1,6 @@
-import { IdItemPedido } from "./item-pedido";
+import { IdItemPedido, ItemPedido } from "./item-pedido";
 import { Maybe } from "../../../typings";
+import { Pedido } from "./pedido";
 
 export const StatusPedidoEnum = {
 	AGUARDANDO_PAGAMENTO: "AGUARDANDO_PAGAMENTO",
@@ -72,7 +73,7 @@ export class ItensPedido {
 	public servico: string;
 	public idItemPedido: IdItemPedido;
 	public documento: string;
-	public valorUsoDiario: number;
+	public valorUsoDiario: Maybe<number>;
 
 	public constructor(props: Partial<ItensPedido> = {}) {
 		this.valor = props.valor || 0;
@@ -106,3 +107,13 @@ export class PagamentosPedido {
 		this.usuario = "";
 	}
 }
+
+export const createOrderItemFromQueryOrderItem = (item: ItensPedido, order: Pedido, remove = false) =>
+	new ItemPedido({
+		idItem: item.numeroItem,
+		idPedido: order.numero,
+		valorCredito: item.valor,
+		numeroLogicoMidia: item.cartao ?? "",
+		excluir: remove,
+		idTipoItemPedido: item.idItemPedido
+	});
