@@ -1,7 +1,6 @@
 import { IsMobifacil, TENANT, Tenants } from "../..";
-import { ToInt } from "../../../format/number";
-import { Favorecido } from "../user/favorecido";
 import { Maybe } from "../../../typings";
+import { Favorecido } from "../user/favorecido";
 
 export const GetApplicationIdByTenant = () => (IsMobifacil ? 1 : 100);
 
@@ -29,16 +28,25 @@ export const getItemTypeOrder = (person: Favorecido): Maybe<IdItemPedido> => {
 };
 
 export const IdAplicacaoPrompt = () => {
-	if (TENANT === Tenants.dev) {
-		return ToInt(prompt("Selecione o idAplicacao --- 1 para Mobifacil --- 100 para andario") || 1);
-	}
+	/*
+		Isso será removido até haver necessidade de alguém pedir para testar cartões diferentes em dev
+
+		if (TENANT === Tenants.dev) {
+		    return ToInt(prompt("Selecione o idAplicacao --- 1 para Mobifacil --- 100 para andario") || 1);
+	    }
+	*/
 	return GetApplicationIdByTenant();
 };
 
 export const IdEmissorPrompt = (tenant: string) => {
-	if (tenant === Tenants.dev) {
-		return ToInt(prompt("Selecione o idEmissor --- 2 para Mobifacil --- 1 para andario") || 1);
-	}
+	/*
+
+		Isso será removido até haver necessidade de alguém pedir para testar cartões diferentes em dev
+
+		if (tenant === Tenants.dev) {
+			return ToInt(prompt("Selecione o idEmissor --- 2 para Mobifacil --- 1 para andario") || 1);
+		}
+	*/
 	if (tenant === Tenants.mobifacil) {
 		return 2;
 	}
@@ -54,14 +62,16 @@ export class ItemPedido {
 	public idModeloProduto: number;
 	public idTipoItemPedido: IdItemPedido;
 	public valorCredito: number;
-	public idTipoPerfilCliente: "USUARIO" | "COLABORADOR";
+	public idTipoPerfilCliente: "USUARIO" | "COLABORADOR" | "EMPRESA";
 	public idCliente: number;
 	public idMotivoCancelamento?: number;
 	public valorProduto: number;
 	public numeroLogicoMidia: string;
 	public idEmissorMidia: number;
+	public excluir: boolean;
 
 	public constructor(props: Partial<ItemPedido> = {}) {
+		this.excluir = props.excluir || false;
 		this.idEmissorMidia = props.idEmissorMidia || IdEmissorPrompt(TENANT);
 		this.valorProduto = props.valorProduto || 0;
 		this.idItem = props.idItem || null;
@@ -78,3 +88,15 @@ export class ItemPedido {
 }
 
 export const defineItemRequestTypeByValue = (value: number) => (value === 0 ? IdItemPedido.PRODUTO : IdItemPedido.PRODUTO_E_CREDITO);
+
+export class ItemPedidoDTO {
+	public collaborator: Favorecido;
+	public itemPedido: ItemPedido;
+	public useWorkingDays?: boolean;
+
+	public constructor(props: Partial<ItemPedidoDTO> = {}) {
+		this.collaborator = new Favorecido(props.collaborator);
+		this.itemPedido = new ItemPedido(props.itemPedido);
+		this.useWorkingDays = !!props.useWorkingDays;
+	}
+}

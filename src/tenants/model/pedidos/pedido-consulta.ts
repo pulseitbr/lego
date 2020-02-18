@@ -1,3 +1,6 @@
+import { IdItemPedido } from "./item-pedido";
+import { Maybe } from "../../../typings";
+
 export const StatusPedidoEnum = {
 	AGUARDANDO_PAGAMENTO: "AGUARDANDO_PAGAMENTO",
 	PAGO_COM_DIFERENCA: "PAGO_COM_DIFERENCA",
@@ -11,12 +14,7 @@ export const StatusPedidoEnum = {
 	WAIT: "WAIT"
 };
 
-export const ticketOrderView = [
-	StatusPedidoEnum.PAGO,
-	StatusPedidoEnum.PAGO_COM_DIFERENCA,
-	StatusPedidoEnum.PRODUZIDO,
-	StatusPedidoEnum.EM_PRODUCAO
-];
+export const ticketOrderView = [StatusPedidoEnum.PAGO, StatusPedidoEnum.PAGO_COM_DIFERENCA, StatusPedidoEnum.PRODUZIDO, StatusPedidoEnum.EM_PRODUCAO];
 
 export type TypeStatusPedido =
 	| "AGUARDANDO_GERACAO_BOLETO"
@@ -66,13 +64,13 @@ export class PedidoConsulta {
 }
 
 export class ItensPedido {
-	public numeroItem: number | null;
+	public numeroItem: Maybe<number>;
 	public idCliente: number;
 	public usuario: string;
-	public cartao: string;
+	public cartao: Maybe<string>;
 	public valor: number;
 	public servico: string;
-	public idItemPedido: number;
+	public idItemPedido: IdItemPedido;
 	public documento: string;
 	public valorUsoDiario: number;
 

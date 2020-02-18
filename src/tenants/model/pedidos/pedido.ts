@@ -1,7 +1,9 @@
 import { ItemPedido } from "./item-pedido";
 import { TipoPagamento } from "./tipo-pagamento";
+import { Maybe } from "../../../typings";
 
 export class Pedido {
+	public readonly numero: Maybe<number>;
 	public readonly idCliente: number;
 	public readonly idTipoPerfilCliente: "USUARIO";
 	public readonly valorPedido: number;
