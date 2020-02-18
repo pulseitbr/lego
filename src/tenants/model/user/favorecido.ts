@@ -1,5 +1,5 @@
-import { Cartao } from "../card/cartao";
 import { IsEmpty } from "../../../validations";
+import { Cartao } from "../card/cartao";
 
 export const filterToOrder = (x: Favorecido) => {
 	if (!IsEmpty(x.cartao)) {

@@ -5,7 +5,7 @@ import { Maybe } from "../../../typings";
 export class Pedido {
 	public readonly numero: Maybe<number>;
 	public readonly idCliente: number;
-	public readonly idTipoPerfilCliente: "USUARIO";
+	public readonly idTipoPerfilCliente: "USUARIO"|"EMPRESA";
 	public readonly valorPedido: number;
 	public readonly valorCalculadoPedido: number;
 	public readonly itensPedido: ItemPedido[];
