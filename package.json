@@ -22,7 +22,7 @@
         "prepare": "yarn run build"
     },
     "dependencies": {
-        "dayjs": "^1.8.19",
+        "dayjs": "^1.8.20",
         "decimal.js": "^10.2.0"
     },
     "peerDependencies": {
@@ -30,9 +30,9 @@
         "react-dom": "^16.11.0"
     },
     "devDependencies": {
-        "@rollup/plugin-node-resolve": "^6.1.0",
-        "@rollup/plugin-strip": "^1.3.1",
-        "@rollup/plugin-url": "^4.0.0",
+        "@rollup/plugin-node-resolve": "^7.1.1",
+        "@rollup/plugin-strip": "^1.3.2",
+        "@rollup/plugin-url": "^4.0.2",
         "@svgr/rollup": "^5.0.1",
         "@types/jest": "^24.0.25",
         "@types/react": "^16.9.17",
@@ -42,21 +42,21 @@
         "cross-env": "^6.0.3",
         "jest": "^24.9.0",
         "react-scripts-ts": "^3.1.0",
-        "rollup": "^1.28.0",
+        "rollup": "^1.31.1",
         "rollup-plugin-alias": "^2.2.0",
         "rollup-plugin-babel": "^4.3.3",
         "rollup-plugin-babel-minify": "^9.1.1",
         "rollup-plugin-commonjs": "^10.1.0",
         "rollup-plugin-node-resolve": "^5.2.0",
-        "rollup-plugin-peer-deps-external": "^2.2.0",
-        "rollup-plugin-postcss": "^2.0.3",
+        "rollup-plugin-peer-deps-external": "^2.2.2",
+        "rollup-plugin-postcss": "^2.0.6",
         "rollup-plugin-strip": "^1.2.2",
         "rollup-plugin-terser": "^5.1.3",
-        "rollup-plugin-typescript2": "^0.25.3",
+        "rollup-plugin-typescript2": "^0.26.0",
         "rollup-plugin-uglify": "^6.0.4",
         "rollup-plugin-url": "^3.0.1",
         "rollup-plugin-visualizer": "^3.3.1",
-        "typescript": "^3.7.4",
+        "typescript": "^3.9.0-dev.20200220",
         "utility-types": "^3.10.0"
     },
     "files": [
