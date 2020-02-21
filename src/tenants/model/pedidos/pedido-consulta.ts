@@ -110,6 +110,7 @@ export class PagamentosPedido {
 
 export const CreateOrderItemFromQueryOrderItem = (item: ItensPedido, order: Pedido, remove = false) =>
 	new ItemPedido({
+		...item,
 		idItem: item.numeroItem,
 		idPedido: order.numero,
 		valorCredito: item.valor,
