@@ -1,8 +1,8 @@
-import { IsMobifacil, TENANT, Tenants } from "../..";
+import { TENANT, Tenants } from "../..";
 import { Maybe } from "../../../typings";
 import { Favorecido } from "../user/favorecido";
 
-export const GetApplicationIdByTenant = () => (IsMobifacil ? 1 : 100);
+export const GetApplicationIdByTenant = () => (TENANT === Tenants.mobifacil ? 1 : 100);
 
 export enum IdItemPedido {
 	CREDITO_APLICACAO = 1,
