@@ -5,8 +5,7 @@ export const FormatCep = (cep: string = "") => OnlyNumbers(cep).replace(/(\d{5})
 
 export const FormatCpf = (cpf: string = "") => OnlyNumbers(cpf).replace(/(\d{3})(\d{3})(\d{3})(\d{2})/gi, "$1.$2.$3-$4");
 
-export const FormatCnpj = (cnpj: string = "") => OnlyNumbers(cnpj).replace(/(\d{2})(\d{3})(\d{3})(\d{3})(\d{2})/gi, "$1.$2.$3/$4-$5");
-
+export const FormatCnpj = (cnpj: string = "") => OnlyNumbers(cnpj).replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/gi, "$1.$2.$3/$4-$5");
 export const FormatCpfOrCnpj = (doc: string = "") => (doc.length === 11 ? FormatCpf(doc) : FormatCnpj(doc));
 
 export const FormatPhone = (phone: string = "", countryCodeLength = 2) => {

@@ -16,7 +16,7 @@ export const ToFloat = (number: string) => Number.parseFloat(ToNumberString(numb
 
 export const CurrencyToFloatString = (value: string | number) =>
 	`${value}`
-		.replace(/[A-Z$ ]+([\d.]+),(\d+)/, "$1,$2")
+		.replace(/[A-Z$ ]+([\d.]+),(\d+)/i, "$1,$2")
 		.replace(/\./gi, "")
 		.replace(/,/, ".");
 
