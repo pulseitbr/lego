@@ -6,7 +6,9 @@ export enum Profile {
 	Motorista = "MOTORISTA",
 	Operadora = "OPERADORA",
 	Permissionario = "PERMISSIONARIO",
-	Usuario = "USUARIO"
+	Usuario = "USUARIO",
+	Atendente = "ATENDENTE_LOJA",
+	Supervisor = "SUPERVISOR_LOJA"
 }
 
 export const ProfileAlias = {
@@ -17,7 +19,9 @@ export const ProfileAlias = {
 	[Profile.Motorista]: "driver",
 	[Profile.Operadora]: "carrier",
 	[Profile.Permissionario]: "permissionee",
-	[Profile.Usuario]: "user"
+    [Profile.Usuario]: "user",
+    [Profile.Atendente]: "clerk",
+    [Profile.Supervisor]: "supervisor",
 };
 
 export const ProfileToAssociateCard = [Profile.Operadora, Profile.Loja, Profile.Permissionario];
