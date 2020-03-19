@@ -10,6 +10,8 @@ export const ToNumberString = (number: string | number = "", precision = 2) =>
 		.toNumber()
 		.toString();
 
+export const ToStrNumber = (number: string | number) => `${number}`;
+
 export const ToNumber = (number: string | number = "", precision = 2) => new Decimal(number).toDP(precision).toNumber();
 
 export const ToFloat = (number: string) => Number.parseFloat(ToNumberString(number));

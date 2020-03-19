@@ -20,10 +20,10 @@ export const FormatPhone = (phone: string = "", countryCodeLength = 2) => {
 		return numbers.replace(/(^\d{2})(\d{4})(\d{4}$)/gi, "($1) $2-$3");
 	}
 	if (numbers.length === 11) {
-		return numbers.replace(/(^\d{2})(\d{4})(\d{4}$)/gi, "($1) $2-$3");
+		return numbers.replace(/(^\d{2})(\d{5})(\d{4}$)/gi, "($1) $2-$3");
 	}
 	if (numbers.length === 12) {
-		return numbers.replace(/(^\d{3})(\d{5})(\d{4}$)/gi, "$1 $2-$3");
+		return numbers.replace(/(^\d{3})(\d{5})(\d{4}$)/gi, "($1) $2-$3");
 	}
 	const re = new RegExp(`([0-9]{${countryCodeLength}})([0-9][0-9])([0-9]{5})([0-9]{4})`, "gi");
 	return numbers.replace(re, "+$1 $2 $3-$4");
