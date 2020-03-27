@@ -33,4 +33,3 @@ export * from "./tenants/model/user/favorecido";
 export * from "./tenants/model/user/profiles";
 export * from "./validations";
 export * from "./validations/validate";
-export * from "./format/dates";
