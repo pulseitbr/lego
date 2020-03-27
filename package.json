@@ -4,7 +4,7 @@
     "description": "",
     "author": "pulseitbr",
     "license": "MIT",
-    "repository": "git://github.com/pulseitbr/lego-components.git",
+    "repository": "git://github.com/pulseitbr/lego.git",
     "publishConfig": {
         "registry": "https://npm.pkg.github.com/"
     },
