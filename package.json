@@ -1,13 +1,13 @@
 {
     "name": "lego",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "description": "",
     "author": "pulseitbr",
     "license": "MIT",
     "repository": "git://github.com/pulseitbr/lego-components.git",
-	"publishConfig": {
-		"registry": "https://npm.pkg.github.com/"
-	},
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com/"
+    },
     "main": "dist/index.js",
     "module": "dist/index.es.js",
     "jsnext:main": "dist/index.es.js",
