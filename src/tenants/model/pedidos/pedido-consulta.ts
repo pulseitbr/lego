@@ -73,7 +73,8 @@ export class ItensPedido {
 	public servico: string;
 	public usuario: string;
 	public valor: number;
-	public valorUsoDiario: Maybe<number>;
+    public valorUsoDiario: Maybe<number>;
+    public valorUsoDiarioRefeicao: Maybe<number>;
 
 	public constructor(props: Partial<ItensPedido> = {}) {
 		this.cartao = props.cartao || "";
@@ -84,7 +85,8 @@ export class ItensPedido {
 		this.servico = props.servico || "";
 		this.usuario = props.usuario || "";
 		this.valor = props.valor || 0;
-		this.valorUsoDiario = props.valorUsoDiario || 0;
+        this.valorUsoDiario = props.valorUsoDiario || 0;
+        this.valorUsoDiarioRefeicao = props.valorUsoDiarioRefeicao || 0;
 	}
 }
 
