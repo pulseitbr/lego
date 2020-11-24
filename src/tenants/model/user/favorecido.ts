@@ -21,7 +21,8 @@ export class Favorecido {
 	public solicitarPrimeiraVia: boolean;
 	public solicitarSegundaVia: boolean;
 	public telefone: string;
-	public valorUsoDiario: number;
+    public valorUsoDiario: number;
+    public valorUsoDiarioRefeicao: number;
 
 	public constructor(props: Partial<Favorecido> = {}) {
 		this.cartao = props.cartao || null;
@@ -36,6 +37,7 @@ export class Favorecido {
 		this.solicitarPrimeiraVia = props.solicitarPrimeiraVia ?? false;
 		this.solicitarSegundaVia = props.solicitarSegundaVia ?? false;
 		this.telefone = props.telefone || "";
-		this.valorUsoDiario = props.valorUsoDiario || 0;
+        this.valorUsoDiario = props.valorUsoDiario || 0;
+        this.valorUsoDiarioRefeicao = props.valorUsoDiarioRefeicao || 0;
 	}
 }
