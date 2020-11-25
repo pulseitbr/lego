@@ -72,7 +72,8 @@ export class ItensPedido {
 	public numeroItem: Maybe<number>;
 	public servico: string;
 	public usuario: string;
-	public valor: number;
+    public valor: number;
+    public valorRefeicao: number;
     public valorUsoDiario: Maybe<number>;
     public valorUsoDiarioRefeicao: Maybe<number>;
 
@@ -84,7 +85,8 @@ export class ItensPedido {
 		this.numeroItem = props.numeroItem || 0;
 		this.servico = props.servico || "";
 		this.usuario = props.usuario || "";
-		this.valor = props.valor || 0;
+        this.valor = props.valor || 0;
+        this.valorRefeicao = props.valorRefeicao || 0;
         this.valorUsoDiario = props.valorUsoDiario || 0;
         this.valorUsoDiarioRefeicao = props.valorUsoDiarioRefeicao || 0;
 	}
