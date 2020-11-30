@@ -23,6 +23,7 @@ export class Favorecido {
 	public telefone: string;
     public valorUsoDiario: number;
     public valorUsoDiarioRefeicao: number;
+    public valorUsoDiarioAlimentacao: number;
 
 	public constructor(props: Partial<Favorecido> = {}) {
 		this.cartao = props.cartao || null;
@@ -39,5 +40,7 @@ export class Favorecido {
 		this.telefone = props.telefone || "";
         this.valorUsoDiario = props.valorUsoDiario || 0;
         this.valorUsoDiarioRefeicao = props.valorUsoDiarioRefeicao || 0;
+        this.valorUsoDiarioAlimentacao = props.valorUsoDiarioAlimentacao || 0;
+	}
 	}
 }
