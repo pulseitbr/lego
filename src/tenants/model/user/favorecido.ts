@@ -42,5 +42,4 @@ export class Favorecido {
         this.valorUsoDiarioRefeicao = props.valorUsoDiarioRefeicao || 0;
         this.valorUsoDiarioAlimentacao = props.valorUsoDiarioAlimentacao || 0;
 	}
-	}
 }
