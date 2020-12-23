@@ -11,7 +11,10 @@ export class Pedido {
 	public readonly numero: Maybe<number>;
 	public readonly tipoPagamento: TipoPagamento[];
 	public readonly valorCalculadoPedido: number;
-	public readonly valorPedido: number;
+    public readonly valorPedido: number;
+    public readonly valorRefeicao: number;
+    public readonly valorAlimentacao: number;
+    public readonly valorCombustivel: number;
 
 	public constructor(props: Partial<Pedido> = {}) {
 		this.comTaxaEntrega = props.comTaxaEntrega ?? false;
@@ -22,6 +25,9 @@ export class Pedido {
 		this.numero = props.numero || null;
 		this.tipoPagamento = props.tipoPagamento || [TipoPagamento.BOLETO];
 		this.valorCalculadoPedido = props.valorCalculadoPedido || 0;
-		this.valorPedido = props.valorPedido || 0;
+        this.valorPedido = props.valorPedido || 0;
+        this.valorRefeicao = props.valorRefeicao || 0;
+        this.valorAlimentacao = props.valorAlimentacao || 0;
+        this.valorCombustivel = props.valorCombustivel || 0;
 	}
 }
