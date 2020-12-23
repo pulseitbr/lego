@@ -1,5 +1,5 @@
 import { Maybe } from "../../../typings";
-import { IdItemPedido, ItemPedido } from "./item-pedido";
+import { IdItemPedido, ItemPedido, IdTipoBeeValePedido } from "./item-pedido";
 import { Pedido } from "./pedido";
 
 export const StatusPedidoEnum = {
@@ -68,7 +68,8 @@ export class ItensPedido {
 	public cartao: Maybe<string>;
 	public documento: string;
 	public idCliente: number;
-	public idItemPedido: IdItemPedido;
+    public idItemPedido: IdItemPedido;
+    public idTipoBeeValePedido: IdTipoBeeValePedido;
 	public numeroItem: Maybe<number>;
 	public servico: string;
 	public usuario: string;
@@ -83,7 +84,8 @@ export class ItensPedido {
 		this.cartao = props.cartao || "";
 		this.documento = props.documento || "";
 		this.idCliente = props.idCliente || 0;
-		this.idItemPedido = props.idItemPedido || 0;
+        this.idItemPedido = props.idItemPedido || 0;
+        this.idTipoBeeValePedido = props.idTipoBeeValePedido || 0;
 		this.numeroItem = props.numeroItem || 0;
 		this.servico = props.servico || "";
 		this.usuario = props.usuario || "";
