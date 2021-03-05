@@ -11,7 +11,14 @@ export enum IdItemPedido {
 	SERVICO = 4,
 	PRODUTO_E_CREDITO = 5,
 	SEGUNDA_VIA = 6,
-	TAXA_ENTREGA = 7
+    TAXA_ENTREGA = 7
+}
+
+export enum IdTipoBeeValePedido {
+    RECARGA_VR = 1,
+    RECARGA_VA = 2,
+    RECARGA_VC = 3,
+    RECARGA_MIX = 4
 }
 
 export const getItemTypeOrder = (person: Favorecido): Maybe<IdItemPedido> => {
@@ -60,7 +67,8 @@ export class ItemPedido {
 	public idPedido?: number | null;
 	public idAplicacao: number;
 	public idModeloProduto: number;
-	public idTipoItemPedido: IdItemPedido;
+    public idTipoItemPedido: IdItemPedido;
+    public idTipoBeeValePedido: IdTipoBeeValePedido;
 	public valorCredito: number;
 	public idTipoPerfilCliente: "USUARIO" | "COLABORADOR" | "EMPRESA";
 	public idCliente: number;
@@ -79,7 +87,8 @@ export class ItemPedido {
 		this.idAplicacao = props.idAplicacao || IdAplicacaoPrompt();
 		this.idModeloProduto = props.idModeloProduto || 1;
 		this.idMotivoCancelamento = props.idMotivoCancelamento || 0;
-		this.idTipoItemPedido = props.idTipoItemPedido || 0;
+        this.idTipoItemPedido = props.idTipoItemPedido || 0;
+        this.idTipoBeeValePedido = props.idTipoBeeValePedido || 0;
 		this.valorCredito = props.valorCredito || 0;
 		this.idTipoPerfilCliente = props.idTipoPerfilCliente || "USUARIO";
 		this.idCliente = props.idCliente || 0;
