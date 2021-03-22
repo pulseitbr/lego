@@ -9,14 +9,16 @@ export enum Tenants {
 	mobifacil = "mobifacil",
 	andario = "andario",
 	andacampos = "andario",
-	dev = "dev"
+	dev = "dev",
+    jae = "jae"
 }
 
 export const MidiaAppId = {
 	mobifacil: 2,
 	andario: 1,
 	andacampos: 1,
-	dev: 1
+	dev: 1,
+    jae: 1
 };
 
 export const ModalByTenant = { name: TENANT, code: MidiaAppId[TENANT] };
