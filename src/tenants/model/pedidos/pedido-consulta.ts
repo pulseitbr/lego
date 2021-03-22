@@ -1,5 +1,5 @@
 import { Maybe } from "../../../typings";
-import { IdItemPedido, ItemPedido } from "./item-pedido";
+import { IdItemPedido, IdItemBeneficio, ItemPedido } from "./item-pedido";
 import { Pedido } from "./pedido";
 
 export const StatusPedidoEnum = {
@@ -69,6 +69,7 @@ export class ItensPedido {
 	public documento: string;
 	public idCliente: number;
     public idItemPedido: IdItemPedido;
+    public idItemBeneficio: IdItemBeneficio;
     public numeroItem: Maybe<number>;
 	public servico: string;
 	public usuario: string;
@@ -84,6 +85,7 @@ export class ItensPedido {
 		this.documento = props.documento || "";
 		this.idCliente = props.idCliente || 0;
         this.idItemPedido = props.idItemPedido || 0;
+        this.idItemBeneficio = props.idItemBeneficio || 0;
 		this.numeroItem = props.numeroItem || 0;
 		this.servico = props.servico || "";
 		this.usuario = props.usuario || "";
@@ -124,5 +126,6 @@ export const CreateOrderItemFromQueryOrderItem = (item: ItensPedido, order: Pedi
 		valorCredito: item.valor,
 		numeroLogicoMidia: item.cartao ?? "",
 		excluir: remove,
-		idTipoItemPedido: item.idItemPedido
+		idTipoItemPedido: item.idItemPedido,
+        idItemBeneficio: item.idItemBeneficio
 	});
