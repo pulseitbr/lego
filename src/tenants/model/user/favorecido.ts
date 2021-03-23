@@ -25,7 +25,7 @@ export class Favorecido {
     public valorUsoDiarioRefeicao: number;
     public valorAlimentacao: number;
     public valorCombustivel: number;
-    public mixAlimentacao: boolean;
+    public beneficioFlex: boolean;
 
 	public constructor(props: Partial<Favorecido> = {}) {
 		this.cartao = props.cartao || null;
@@ -44,6 +44,6 @@ export class Favorecido {
         this.valorUsoDiarioRefeicao = props.valorUsoDiarioRefeicao || 0;
         this.valorAlimentacao = props.valorAlimentacao || 0;
         this.valorCombustivel = props.valorCombustivel || 0;
-        this.mixAlimentacao = props.mixAlimentacao ?? false;
+        this.beneficioFlex = props.beneficioFlex ?? false;
 	}
 }
