@@ -10,7 +10,8 @@ export enum Tenants {
 	andario = "andario",
 	andacampos = "andario",
 	dev = "dev",
-    jae = "jae"
+    jae = "jae",
+    homolog = "homolog"
 }
 
 export const MidiaAppId = {
@@ -18,7 +19,8 @@ export const MidiaAppId = {
 	andario: 1,
 	andacampos: 1,
 	dev: 1,
-    jae: 1
+    jae: 1,
+    homolog: 1
 };
 
 export const ModalByTenant = { name: TENANT, code: MidiaAppId[TENANT] };
