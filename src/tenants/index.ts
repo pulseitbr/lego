@@ -6,6 +6,9 @@ export const GLOBAL_CONFIG = $__BP__.config;
 export const VERSION = $__BP__.version;
 
 export enum Tenants {
+	mobifacil = "mobifacil",
+	andario = "andario",
+	andacampos = "andario",
 	dev = "dev",
     jae = "jae",
     homolog = "homolog",
@@ -13,6 +16,9 @@ export enum Tenants {
 }
 
 export const MidiaAppId = {
+	mobifacil: 2,
+	andario: 1,
+	andacampos: 1,
 	dev: 1,
     jae: 1,
     homolog: 1,
@@ -20,3 +26,5 @@ export const MidiaAppId = {
 };
 
 export const ModalByTenant = { name: TENANT, code: MidiaAppId[TENANT] };
+
+export const IsMobifacil = () => TENANT === Tenants.mobifacil;
