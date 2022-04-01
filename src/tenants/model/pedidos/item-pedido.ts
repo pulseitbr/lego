@@ -1,4 +1,4 @@
-import { TENANT, Tenants } from "../..";
+import { TENANT } from "../..";
 import { Maybe } from "../../../typings";
 import { Favorecido } from "../user/favorecido";
 
