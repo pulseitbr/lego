@@ -13,12 +13,3 @@ export enum Tenants {
     riobranco = "riobranco"
 }
 
-export const MidiaAppId = {
-	dev: 1,
-    jae: 1,
-    homolog: 1,
-    cross: 1,
-    riobranco: 1
-};
-
-export const ModalByTenant = { name: TENANT, code: MidiaAppId[TENANT] };

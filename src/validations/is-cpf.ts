@@ -103,9 +103,6 @@ const optionalValidations = {
 
 export const IsCPF = (cpf: string, params: CPFValidations = {}) => {
 	const isCPF = CpfAlgorithm(cpf);
-	const parameters = new ParametersValues(isCPF, cpf, params);
-	const sideValidations = Object.keys(params).reduce((acc: boolean, el: keyof CPFValidations) => {
-		return acc && optionalValidations[el](parameters);
-	}, true);
-	return isCPF && sideValidations;
+
+	return isCPF;
 };
