@@ -1,8 +1,7 @@
-import { TENANT, Tenants } from "../..";
+
 import { Maybe } from "../../../typings";
 import { Favorecido } from "../user/favorecido";
 
-export const GetApplicationIdByTenant = () => (TENANT === Tenants.mobifacil ? 1 : 100);
 
 export enum IdItemPedido {
 	CREDITO_APLICACAO = 1,
@@ -35,32 +34,6 @@ export const getItemTypeOrder = (person: Favorecido): Maybe<IdItemPedido> => {
 	return null;
 };
 
-export const IdAplicacaoPrompt = () => {
-	/*
-		Isso será removido até haver necessidade de alguém pedir para testar cartões diferentes em dev
-
-		if (TENANT === Tenants.dev) {
-		    return ToInt(prompt("Selecione o idAplicacao --- 1 para Mobifacil --- 100 para andario") || 1);
-	    }
-	*/
-	return GetApplicationIdByTenant();
-};
-
-export const IdEmissorPrompt = (tenant: string) => {
-	/*
-
-		Isso será removido até haver necessidade de alguém pedir para testar cartões diferentes em dev
-
-		if (tenant === Tenants.dev) {
-			return ToInt(prompt("Selecione o idEmissor --- 2 para Mobifacil --- 1 para andario") || 1);
-		}
-	*/
-	if (tenant === Tenants.mobifacil) {
-		return 2;
-	}
-	return 1;
-};
-
 export const motivoCancelamentoPerda = 1;
 
 export class ItemPedido {
@@ -81,11 +54,11 @@ export class ItemPedido {
 
 	public constructor(props: Partial<ItemPedido> = {}) {
 		this.excluir = props.excluir || false;
-		this.idEmissorMidia = props.idEmissorMidia || IdEmissorPrompt(TENANT);
+		this.idEmissorMidia = props.idEmissorMidia || 1;
 		this.valorProduto = props.valorProduto || 0;
 		this.idItem = props.idItem || null;
 		this.idPedido = props.idPedido || null;
-		this.idAplicacao = props.idAplicacao || IdAplicacaoPrompt();
+		this.idAplicacao = props.idAplicacao || 100;
 		this.idModeloProduto = props.idModeloProduto || 1;
 		this.idMotivoCancelamento = props.idMotivoCancelamento || 0;
         this.idTipoItemPedido = props.idTipoItemPedido || 0;
