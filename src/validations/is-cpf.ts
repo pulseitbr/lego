@@ -1,33 +1,5 @@
 import { OnlyNumbers, ToFloat, ToInt } from "../format/number";
 
-type States =
-	| "RS"
-	| "DF"
-	| "GO"
-	| "MT"
-	| "MS"
-	| "TO"
-	| "AM"
-	| "PA"
-	| "RR"
-	| "AP"
-	| "AC"
-	| "RO"
-	| "CE"
-	| "MA"
-	| "PI"
-	| "PB"
-	| "PE"
-	| "AL"
-	| "RN"
-	| "BA"
-	| "SE"
-	| "MG"
-	| "RJ"
-	| "ES"
-	| "SP"
-	| "PR"
-	| "SC";
 
 export const equals = (target: number | string, intent: number | string) => ToFloat(target.toString()) === ToFloat(intent.toString());
 
@@ -70,42 +42,13 @@ const CpfAlgorithm = (t: string) => {
 	return false;
 };
 
-type CPFValidations = {
-	validateMask?: boolean;
-	validateByStates?: States[];
-	validateByNinthDigit?: number;
-};
+
 
 export const CPF_REGEX_USE_MASK = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
 export const CPF_REGEX_MAYBE_MASK = /^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$/;
 
-class ParametersValues {
-	public isCPF: boolean;
-	public str: string;
-	public useMask?: boolean;
-	public ninthDigit?: number;
-	public states?: States[];
 
-	constructor(isCPF: boolean, str: string, props: Partial<CPFValidations>) {
-		this.str = str;
-		this.isCPF = isCPF;
-		this.useMask = !!props.validateMask;
-		this.ninthDigit = props.validateByNinthDigit || -1;
-		this.states = props.validateByStates || [];
-	}
-}
-
-const optionalValidations = {
-	validateMask: (abstract: ParametersValues) => {
-		return abstract.isCPF && CPF_REGEX_USE_MASK.test(abstract.str);
-	}
-};
-
-export const IsCPF = (cpf: string, params: CPFValidations = {}) => {
+export const IsCPF = (cpf: string) => {
 	const isCPF = CpfAlgorithm(cpf);
-	const parameters = new ParametersValues(isCPF, cpf, params);
-	const sideValidations = Object.keys(params).reduce((acc: boolean, el: keyof CPFValidations) => {
-		return acc && optionalValidations[el](parameters);
-	}, true);
-	return isCPF && sideValidations;
+	return isCPF;
 };

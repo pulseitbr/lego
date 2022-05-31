@@ -21,4 +21,4 @@ export const MidiaAppId = {
     riobranco: 1
 };
 
-export const ModalByTenant = { name: TENANT, code: MidiaAppId[TENANT] };
+export const ModalByTenant = { name: TENANT, code: 1 };

@@ -53,8 +53,8 @@ export class ItemPedido {
 	public excluir: boolean;
 
 	public constructor(props: Partial<ItemPedido> = {}) {
-		this.excluir = props.excluir || false;
-		this.idEmissorMidia = props.idEmissorMidia || 100;
+		this.excluir = props.excluir || false; 
+		this.idEmissorMidia = props.idEmissorMidia || 100; 
 		this.valorProduto = props.valorProduto || 0;
 		this.idItem = props.idItem || null;
 		this.idPedido = props.idPedido || null;
