@@ -7,18 +7,16 @@ export const VERSION = $__BP__.version;
 
 export enum Tenants {
 	dev = "dev",
-    jae = "jae",
     homolog = "homolog",
     cross = "cross",
-    riobranco = "riobranco"
+    jae_pa = "jae_pa"
 }
 
 export const MidiaAppId = {
 	dev: 1,
-    jae: 1,
+    jae_pa: 1,
     homolog: 1,
-    cross: 1,
-    riobranco: 1
+    cross: 1
 };
 
 export const ModalByTenant = { name: TENANT, code: 1 };
