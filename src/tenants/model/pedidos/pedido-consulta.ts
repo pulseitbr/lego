@@ -68,7 +68,7 @@ export class ItensPedido {
 	public cartao: Maybe<string>;
 	public documento: string;
 	public idCliente: number;
-    public idTipoItemPedido: IdItemPedido;
+    public idItemPedido: IdItemPedido;
     public idItemBeneficio: IdItemBeneficio;
     public numeroItem: Maybe<number>;
 	public servico: string;
@@ -84,7 +84,7 @@ export class ItensPedido {
 		this.cartao = props.cartao || "";
 		this.documento = props.documento || "";
 		this.idCliente = props.idCliente || 0;
-        this.idTipoItemPedido = props.idTipoItemPedido || 0;
+        this.idItemPedido = props.idItemPedido || 0;
         this.idItemBeneficio = props.idItemBeneficio || 0;
 		this.numeroItem = props.numeroItem || 0;
 		this.servico = props.servico || "";
@@ -126,6 +126,6 @@ export const CreateOrderItemFromQueryOrderItem = (item: ItensPedido, order: Pedi
 		valorCredito: item.valor,
 		numeroLogicoMidia: item.cartao ?? "",
 		excluir: remove,
-		idTipoItemPedido: item.idTipoItemPedido,
+		idTipoItemPedido: item.idItemPedido,
         idItemBeneficio: item.idItemBeneficio
 	});
