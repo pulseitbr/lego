@@ -39,7 +39,7 @@ export const motivoCancelamentoPerda = 1;
 export class ItemPedido {
 	public idItem?: number | null;
 	public idPedido?: number | null;
-	public idAplicacao: number;
+	public idAplicacao: number | null;
 	public idModeloProduto: number;
     public idTipoItemPedido: IdItemPedido;
     public idItemBeneficio: IdItemBeneficio;
@@ -49,16 +49,16 @@ export class ItemPedido {
 	public idMotivoCancelamento?: number;
 	public valorProduto: number;
 	public numeroLogicoMidia: string;
-	public idEmissorMidia: number;
+	public idEmissorMidia: number | null;
 	public excluir: boolean;
 
 	public constructor(props: Partial<ItemPedido> = {}) {
-		this.excluir = props.excluir || false; 
-		this.idEmissorMidia = props.idEmissorMidia || 100; 
+		this.excluir = props.excluir || false;
+		this.idEmissorMidia = props.idEmissorMidia || null;
 		this.valorProduto = props.valorProduto || 0;
 		this.idItem = props.idItem || null;
 		this.idPedido = props.idPedido || null;
-		this.idAplicacao = props.idAplicacao || 100;
+		this.idAplicacao = props.idAplicacao || null;
 		this.idModeloProduto = props.idModeloProduto || 1;
 		this.idMotivoCancelamento = props.idMotivoCancelamento || 0;
         this.idTipoItemPedido = props.idTipoItemPedido || 0;
