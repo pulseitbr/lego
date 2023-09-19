@@ -1,7 +1,5 @@
-
 import { Maybe } from "../../../typings";
 import { Favorecido } from "../user/favorecido";
-
 
 export enum IdItemPedido {
 	CREDITO_APLICACAO = 1,
@@ -10,8 +8,8 @@ export enum IdItemPedido {
 	SERVICO = 4,
 	PRODUTO_E_CREDITO = 5,
 	SEGUNDA_VIA = 6,
-    TAXA_ENTREGA = 7,
-    BENEFICIO = 8
+	TAXA_ENTREGA = 7,
+	BENEFICIO = 8
 }
 
 export enum IdItemBeneficio {
@@ -39,10 +37,11 @@ export const motivoCancelamentoPerda = 1;
 export class ItemPedido {
 	public idItem?: number | null;
 	public idPedido?: number | null;
+	public idProduto: number;
 	public idAplicacao: number | null;
 	public idModeloProduto: number;
-    public idTipoItemPedido: IdItemPedido;
-    public idItemBeneficio: IdItemBeneficio;
+	public idTipoItemPedido: IdItemPedido;
+	public idItemBeneficio: IdItemBeneficio;
 	public valorCredito: number;
 	public idTipoPerfilCliente: "USUARIO" | "COLABORADOR" | "EMPRESA";
 	public idCliente: number;
@@ -61,8 +60,8 @@ export class ItemPedido {
 		this.idAplicacao = props.idAplicacao || null;
 		this.idModeloProduto = props.idModeloProduto || 1;
 		this.idMotivoCancelamento = props.idMotivoCancelamento || 0;
-        this.idTipoItemPedido = props.idTipoItemPedido || 0;
-        this.idItemBeneficio = props.idItemBeneficio || 0;
+		this.idTipoItemPedido = props.idTipoItemPedido || 0;
+		this.idItemBeneficio = props.idItemBeneficio || 0;
 		this.valorCredito = props.valorCredito || 0;
 		this.idTipoPerfilCliente = props.idTipoPerfilCliente || "USUARIO";
 		this.idCliente = props.idCliente || 0;
